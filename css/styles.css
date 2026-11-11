@@ -109,9 +109,16 @@ input, textarea { caret-color: var(--leaf); }
   flex: none;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.9;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+/* Small "opens in a new tab" mark after external links */
+.ext-icon {
+  width: 0.85em; height: 0.85em;
+  margin-left: 0.3em;
+  vertical-align: -0.05em;
+  opacity: 0.7;
 }
 
 .container {
@@ -244,25 +251,15 @@ input, textarea { caret-color: var(--leaf); }
 }
 .nav-toggle:hover { border-color: var(--accent); color: var(--accent); }
 .nav-toggle { display: none; }
-.nav-toggle-bar,
-.nav-toggle-bar::before,
-.nav-toggle-bar::after {
-  position: absolute;
-  left: 50%;
-  width: 1.2rem; height: 2px;
-  margin-left: -0.6rem;
-  background: currentColor;
-  border-radius: 2px;
-  transition: transform 0.25s var(--ease-out), opacity 0.2s;
+/* Menu <-> close icons swap with a short turn */
+.nav-toggle .icon {
+  grid-area: 1 / 1;
+  width: 1.4rem; height: 1.4rem;
+  transition: opacity 0.2s, transform 0.3s var(--ease-out);
 }
-.nav-toggle-bar { top: 50%; margin-top: -1px; }
-.nav-toggle-bar::before,
-.nav-toggle-bar::after { content: ""; left: 0; margin-left: 0; }
-.nav-toggle-bar::before { transform: translateY(-6px); }
-.nav-toggle-bar::after { transform: translateY(6px); }
-.nav-open .nav-toggle-bar { background: transparent; }
-.nav-open .nav-toggle-bar::before { transform: rotate(45deg); background: currentColor; }
-.nav-open .nav-toggle-bar::after { transform: rotate(-45deg); background: currentColor; }
+.nav-toggle .icon-close { opacity: 0; transform: rotate(-90deg) scale(0.7); }
+.nav-open .nav-toggle .icon-menu { opacity: 0; transform: rotate(90deg) scale(0.7); }
+.nav-open .nav-toggle .icon-close { opacity: 1; transform: none; }
 
 .site-nav { margin-left: auto; }
 .site-nav ul {
@@ -782,7 +779,14 @@ input, textarea { caret-color: var(--leaf); }
   font-size: 1.15rem;
 }
 
+.copy-btn .icon { width: 0.95rem; height: 0.95rem; }
+.copy-btn .copied-icon,
+.copy-btn.is-copied .copy-icon { display: none; }
+.copy-btn.is-copied .copied-icon { display: inline-block; }
 .copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   min-height: 2rem;
   padding: 0.25rem 0.7rem;
   border-radius: 6px;
@@ -890,7 +894,8 @@ html { scroll-snap-type: y proximity; }
   padding-block: 0.9rem;
   border-bottom: 1px solid var(--line);
 }
-.facts dt { color: var(--accent); font-weight: 700; }
+.facts dt { display: flex; align-items: center; gap: 0.5rem; color: var(--accent); font-weight: 700; }
+.facts dt .icon { width: 1.1rem; height: 1.1rem; }
 .facts dd { color: var(--text); }
 
 /* What I can make: two offer panels */

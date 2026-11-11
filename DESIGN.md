@@ -36,7 +36,7 @@ No blue anywhere: the whole accent family is purple (user's choice).
 - Cards/frames (badge, preview frame): 12px radius. Icon tiles: 8px.
 - Copy button next to the email (for visitors without a mail app). Footer: email, LinkedIn and GitHub icon links + back to top.
 - Websites & AI: code-drawn miniature of this site + three steps.
-- Icons: inline SVG sprite, 24px grid, 1.8–1.9 stroke, round caps.
+- Icons: **coolicons v5.3** (line / round, MIT, credit in `CREDITS.md`), drawn once in an inline SVG sprite (`<symbol id="i-…">`, reused with `<use>`). 24px grid, 2px stroke, round caps, `currentColor`. Ids: i-chat, i-check, i-tick, i-list, i-monitor, i-table, i-sparkle, i-phone-check, i-mail, i-linkedin, i-github, i-arrow-up/down/right, i-send, i-menu, i-close, i-copy, i-translate, i-book, i-external. The mobile menu button swaps menu/close; Copy swaps copy/tick; external links get a small i-external mark.
 
 ## Page structure (five full screens)
 
