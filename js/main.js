@@ -115,13 +115,27 @@
     });
   });
 
-  // Hero greeting: cycles through the three languages Danil speaks
+  // Hero greeting: "hello" in the world's most spoken languages
   var word = document.querySelector('.greeting-word');
   if (word && !reduceMotion) {
     var greetings = [
       { text: 'Hello', lang: 'en' },
+      { text: 'Hola', lang: 'es' },
+      { text: '你好', lang: 'zh' },
+      { text: 'नमस्ते', lang: 'hi' },
+      { text: 'مرحبا', lang: 'ar' },
+      { text: 'Bonjour', lang: 'fr' },
+      { text: 'Olá', lang: 'pt' },
+      { text: 'হ্যালো', lang: 'bn' },
       { text: 'Привіт', lang: 'uk' },
-      { text: 'Привет', lang: 'ru' }
+      { text: 'Привет', lang: 'ru' },
+      { text: 'こんにちは', lang: 'ja' },
+      { text: 'Hallo', lang: 'de' },
+      { text: '안녕하세요', lang: 'ko' },
+      { text: 'Merhaba', lang: 'tr' },
+      { text: 'Ciao', lang: 'it' },
+      { text: 'Xin chào', lang: 'vi' },
+      { text: 'Cześć', lang: 'pl' }
     ];
     var gi = 0;
     setInterval(function () {
@@ -131,17 +145,18 @@
       setTimeout(function () {
         word.textContent = greetings[gi].text;
         word.setAttribute('lang', greetings[gi].lang);
+        word.setAttribute('dir', greetings[gi].lang === 'ar' ? 'rtl' : 'ltr');
         word.classList.remove('is-leaving');
         word.classList.add('is-entering');
         void word.offsetWidth; // restart transition from the entering state
         word.classList.remove('is-entering');
       }, 350);
-    }, 2600);
+    }, 2000);
   }
 
   // Name badge: tilts gently toward the pointer (fine pointers only)
   var badge = document.querySelector('[data-tilt]');
-  var stage = badge && badge.closest('.hero');
+  var stage = badge && badge.closest('section');
   var finePointer = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (badge && stage && finePointer && !reduceMotion) {
     var frame = null;
@@ -166,31 +181,100 @@
     });
   }
 
-  // Ask box: types what I can help with, one line at a time
-  var typed = document.querySelector('.ask-typed');
-  if (typed && !reduceMotion) {
-    var lines = [
-      'Looking for someone friendly at your front desk?',
-      'Need customer support in English, Ukrainian or Russian?',
-      'Want a careful person for data entry and admin work?',
-      'Need a simple website built with AI?',
-      "Let's talk. I usually reply the same day."
-    ];
-    var li = 0, ci = lines[0].length, deleting = true;
-    var tick = function () {
-      var line = lines[li];
-      if (deleting) {
-        ci--;
-        if (ci <= 0) { deleting = false; li = (li + 1) % lines.length; ci = 0; }
-      } else {
-        ci++;
+  // "Ask about ..." links pre-select the matching service in the form
+  document.querySelectorAll('[data-service]').forEach(function (link) {
+    link.addEventListener('click', function () {
+      var value = link.getAttribute('data-service') === 'website' ? 'A website' : 'Data entry & admin help';
+      var radio = document.querySelector('input[name="service"][value="' + value + '"]');
+      if (radio) {
+        radio.checked = true;
+        radio.dispatchEvent(new Event('input', { bubbles: true }));
       }
-      typed.textContent = lines[li].slice(0, ci);
-      var delay = deleting ? 22 : 45;
-      if (!deleting && ci >= lines[li].length) { deleting = true; delay = 2200; }
-      setTimeout(tick, delay);
+    });
+  });
+
+  // Request form: checks the fields, then opens the visitor's email app
+  // with everything filled in (no server needed)
+  var form = document.getElementById('request-form');
+  if (form) {
+    var TO = 'abramitov.danya@gmail.com';
+    var statusEl = document.getElementById('form-status');
+
+    var setError = function (id, fieldEl, msg) {
+      var err = document.getElementById(id);
+      if (err) err.textContent = msg || '';
+      var wrap = fieldEl && fieldEl.closest('.field');
+      if (wrap) wrap.classList.toggle('has-error', !!msg);
+      if (fieldEl && fieldEl.setAttribute) {
+        if (msg) { fieldEl.setAttribute('aria-invalid', 'true'); fieldEl.setAttribute('aria-describedby', id); }
+        else fieldEl.removeAttribute('aria-invalid');
+      }
     };
-    setTimeout(tick, 2600);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = form.elements.name.value.trim();
+      var email = form.elements.email.value.trim();
+      var phone = form.elements.phone.value.trim();
+      var company = form.elements.company.value.trim();
+      var details = form.elements.details.value.trim();
+      var language = form.elements.language.value;
+      var serviceEl = form.querySelector('input[name="service"]:checked');
+      var service = serviceEl ? serviceEl.value : '';
+
+      var firstBad = null;
+      var check = function (ok, id, el, msg) {
+        setError(id, el, ok ? '' : msg);
+        if (!ok && !firstBad) firstBad = el;
+      };
+      check(name.length > 0, 'f-name-error', form.elements.name, 'Please enter your name.');
+      check(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), 'f-email-error', form.elements.email,
+        email ? 'That email looks incomplete. Please check it.' : 'Please enter your email so I can reply.');
+      check(!!service, 'f-service-error', form.querySelector('input[name="service"]'), 'Please choose what you need.');
+      check(details.length > 0, 'f-details-error', form.elements.details, 'Please tell me a little about what you need.');
+
+      if (firstBad) {
+        if (statusEl) { statusEl.textContent = 'Please fix the highlighted fields.'; statusEl.classList.remove('is-ok'); }
+        firstBad.focus();
+        return;
+      }
+
+      var lines = [
+        'Name: ' + name,
+        'Email: ' + email,
+        phone ? 'Phone: ' + phone : null,
+        company ? 'Business: ' + company : null,
+        'Service: ' + service,
+        'Preferred language: ' + language,
+        '',
+        'What I need:',
+        details
+      ].filter(function (l) { return l !== null; });
+
+      var subject = 'New request: ' + service + ' (' + name + ')';
+      var href = 'mailto:' + TO +
+        '?subject=' + encodeURIComponent(subject) +
+        '&body=' + encodeURIComponent(lines.join('\n'));
+
+      window.location.href = href;
+      if (statusEl) {
+        statusEl.textContent = 'Your email app should open now. Press send there. If nothing opened, email me at ' + TO + '.';
+        statusEl.classList.add('is-ok');
+      }
+    });
+
+    // Clear an error as soon as the visitor fixes the field
+    form.addEventListener('input', function (e) {
+      var t = e.target;
+      if (!t || !t.closest) return;
+      var wrap = t.closest('.field');
+      if (wrap && wrap.classList.contains('has-error')) {
+        var err = wrap.querySelector('.field-error');
+        if (err) err.textContent = '';
+        wrap.classList.remove('has-error');
+        t.removeAttribute('aria-invalid');
+      }
+    });
   }
 
   // Footer year

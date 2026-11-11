@@ -36,20 +36,23 @@ Tokens live in `css/styles.css` `:root` as semantic names. Dark only; there is n
 - Websites & AI: code-drawn miniature of this site + three steps.
 - Icons: inline SVG sprite, 24px grid, 1.8–1.9 stroke, round caps.
 
-## Hero (Anima-style)
+## Page structure (five full screens)
 
-- Centered: serif greeting headline, muted subtitle, then the **ask box** (purple-bordered panel with a soft purple glow) that types out what Danil can help with; LinkedIn and GitHub chips plus a purple `#5d4fae` "Email me" send button.
-- **Background art** (inline SVG `.hero-art`): purple gradient shapes top-left, a rotated capsule top-right and a dome bottom-left, outlined with copper `#f2c2a2` strokes, plus six purple lines radiating from below the centre. Lines and outlines draw in on load.
-- **Showcase panel**: four 16:10 preview tiles with captions (scaled name badge, site preview, three greetings on deep blue, a mini spreadsheet), each linking to its section.
-- **Languages & tools strip**: muted wordmarks scrolling in a marquee with faded edges.
-- Header is transparent over the hero, turns solid `--bg` once scrolled; white pill "Email me" CTA on desktop.
+Each part is a `.screen` (min-height 100svh, vertically centred, `scroll-snap: y proximity`).
+
+1. **Hero**: the greeting cycles "Hello" in 17 widely spoken languages, then "I'm Danil Abramitov", a short line about what he does, and one big "Contact me" button. Background art: inline SVG `.hero-art` with purple gradient shapes, copper `#f2c2a2` outlines and radiating lines, drawn in on load. The languages & tools marquee sits at the bottom.
+2. **About me**: lead text, tags and a facts list (languages, education, computer), with the swinging name badge on a lanyard to the right.
+3. **What I can make for you**: two offer panels, "A website, built with AI" and "Data entry & admin help". Each has ticks and an "Ask about…" link that pre-selects that service in the form.
+4. **My work**: this website as the project, with a code-drawn mini preview, chips and three build steps.
+5. **Contact** (deep blue band): intro, email, LinkedIn and GitHub links, and the **request form**. The form asks for name, email, an optional phone and business, the service (radio pills), details and a preferred language. Send checks the fields, then opens the visitor's email app with a filled-in `mailto:` (no server).
+
+The header is transparent over the hero and turns solid `--bg` once scrolled. It has a white pill "Contact me" CTA on desktop.
 
 ## Motion
 
-- Hero greeting cycles Hello / Привіт / Привет (2.6s).
-- Ask box types and erases five lines in a loop.
+- The hero greeting changes every 2s. Arabic is set `dir="rtl"`.
 - Hero art draws in once; tools strip scrolls continuously.
-- Badge (in the first showcase tile) swings in on load, tilts toward the pointer on fine pointers.
+- Badge swings in on load, tilts toward the pointer on fine pointers.
 - Sections fade up once on scroll. All motion off under `prefers-reduced-motion`.
 
 ## Layout

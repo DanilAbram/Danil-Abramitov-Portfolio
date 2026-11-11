@@ -12,11 +12,11 @@ Static HTML / CSS / vanilla JS, no framework, no build step (user's choice). Int
 
 ## Users
 
-Recruiters and hiring managers in Ottawa screening candidates for client service, customer support and entry-level administrative roles. They open a link Danil sends (often on a phone), skim in under a minute, and decide whether to contact him.
+Two groups: (1) recruiters and hiring managers in Ottawa screening for client service, customer support and admin roles; (2) customers (small businesses and individuals) who may hire Danil for a simple website built with AI or for data entry and admin work. Both often open the link on a phone.
 
 ## Product Purpose
 
-An online resume for Danil Abramitov that he shows instead of a paper CV. Success: a recruiter quickly understands who he is, what he can do for their team, and contacts him or downloads the CV.
+Danil's personal site, used in place of a paper resume and as a small services page. Success: a visitor quickly sees who he is and what he can make for them, then sends a request through the contact form.
 
 ## Positioning
 
@@ -28,9 +28,9 @@ Shared as a link alongside job applications; the downloadable PDF CV remains the
 
 ## Capabilities and Constraints
 
-- Sections: About Me, What I Can Do (for an employer's team), Experience, Skills & Education, Contact/socials.
-- Contact: email on the page; phone number appears only in the downloadable PDF (privacy choice).
-- Socials: LinkedIn and GitHub — URLs not provided yet (placeholders).
+- Five full-screen parts: Hello (contact button), About me, What I can make for you (Websites with AI; Data entry & admin), My work, Request form.
+- The request form opens the visitor's email app with a filled-in message (mailto). There is no server or third-party form service.
+- Contact: email only; Danil's phone number is never shown. Visitors may leave their own phone number in the form (optional).
 - No photo provided yet.
 
 ## Brand Commitments
