@@ -36,10 +36,20 @@ Tokens live in `css/styles.css` `:root` as semantic names. Dark only; there is n
 - Websites & AI: code-drawn miniature of this site + three steps.
 - Icons: inline SVG sprite, 24px grid, 1.8–1.9 stroke, round caps.
 
+## Hero (Anima-style)
+
+- Centered: serif greeting headline, muted subtitle, then the **ask box** (purple-bordered panel with a soft purple glow) that types out what Danil can help with; LinkedIn and GitHub chips plus a purple `#5d4fae` "Email me" send button.
+- **Background art** (inline SVG `.hero-art`): purple gradient shapes top-left, a rotated capsule top-right and a dome bottom-left, outlined with copper `#f2c2a2` strokes, plus six purple lines radiating from below the centre. Lines and outlines draw in on load.
+- **Showcase panel**: four 16:10 preview tiles with captions (scaled name badge, site preview, three greetings on deep blue, a mini spreadsheet), each linking to its section.
+- **Languages & tools strip**: muted wordmarks scrolling in a marquee with faded edges.
+- Header is transparent over the hero, turns solid `--bg` once scrolled; white pill "Email me" CTA on desktop.
+
 ## Motion
 
 - Hero greeting cycles Hello / Привіт / Привет (2.6s).
-- Badge swings in on load, tilts toward the pointer on fine pointers.
+- Ask box types and erases five lines in a loop.
+- Hero art draws in once; tools strip scrolls continuously.
+- Badge (in the first showcase tile) swings in on load, tilts toward the pointer on fine pointers.
 - Sections fade up once on scroll. All motion off under `prefers-reduced-motion`.
 
 ## Layout

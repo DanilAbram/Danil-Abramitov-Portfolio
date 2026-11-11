@@ -166,6 +166,33 @@
     });
   }
 
+  // Ask box: types what I can help with, one line at a time
+  var typed = document.querySelector('.ask-typed');
+  if (typed && !reduceMotion) {
+    var lines = [
+      'Looking for someone friendly at your front desk?',
+      'Need customer support in English, Ukrainian or Russian?',
+      'Want a careful person for data entry and admin work?',
+      'Need a simple website built with AI?',
+      "Let's talk. I usually reply the same day."
+    ];
+    var li = 0, ci = lines[0].length, deleting = true;
+    var tick = function () {
+      var line = lines[li];
+      if (deleting) {
+        ci--;
+        if (ci <= 0) { deleting = false; li = (li + 1) % lines.length; ci = 0; }
+      } else {
+        ci++;
+      }
+      typed.textContent = lines[li].slice(0, ci);
+      var delay = deleting ? 22 : 45;
+      if (!deleting && ci >= lines[li].length) { deleting = true; delay = 2200; }
+      setTimeout(tick, delay);
+    };
+    setTimeout(tick, 2600);
+  }
+
   // Footer year
   var year = document.getElementById('year');
   if (year) year.textContent = new Date().getFullYear();

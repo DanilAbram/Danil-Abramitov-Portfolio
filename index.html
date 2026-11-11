@@ -42,6 +42,7 @@
       <symbol id="i-cap" viewBox="0 0 24 24"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></symbol>
       <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m5 12 7-7 7 7M12 19V5"/></symbol>
       <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14M19 12l-7 7-7-7"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></symbol>
     </defs>
   </svg>
 
@@ -63,6 +64,7 @@
       </nav>
 
       <div class="header-tools">
+        <a class="header-cta" href="mailto:abramitov.danya@gmail.com">Email me</a>
         <button class="nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
           <span class="nav-toggle-bar" aria-hidden="true"></span>
         </button>
@@ -73,50 +75,158 @@
   <main id="main">
     <!-- HERO -->
     <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <h1 id="hero-title" class="hero-title">
-            <span class="greeting" aria-hidden="true"><span class="greeting-word" lang="en">Hello</span>,</span>
-            <span class="visually-hidden">Hello, </span>
-            I'm Danil&nbsp;Abramitov.
-          </h1>
-          <p class="hero-role">Client service, customer support and computer work, done calmly, carefully and with a smile. I also build websites with AI.</p>
-          <ul class="hero-facts" role="list">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Ottawa, ON</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>English · Ukrainian · Russian</li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-sparkle"/></svg>Builds websites with AI</li>
-          </ul>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="mailto:abramitov.danya@gmail.com">
-              <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>
-              Email me
+      <!-- Background graphics: purple shapes, copper outlines, radiating lines -->
+      <svg class="hero-art" viewBox="0 0 1440 1000" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="g-fill-a" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#4a3f8f" stop-opacity="0.9"/>
+            <stop offset="1" stop-color="#2b2b2b" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="g-fill-b" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#4a3f8f" stop-opacity="0.85"/>
+            <stop offset="1" stop-color="#222224" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="g-copper" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#f2c2a2" stop-opacity="0"/>
+            <stop offset="0.45" stop-color="#f2c2a2" stop-opacity="0.95"/>
+            <stop offset="1" stop-color="#f2c2a2" stop-opacity="0.15"/>
+          </linearGradient>
+          <linearGradient id="g-line" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0" stop-color="#7b6ad6" stop-opacity="0"/>
+            <stop offset="0.35" stop-color="#7b6ad6" stop-opacity="0.75"/>
+            <stop offset="1" stop-color="#7b6ad6" stop-opacity="0.15"/>
+          </linearGradient>
+        </defs>
+
+        <!-- radiating lines -->
+        <g class="art-lines" stroke="url(#g-line)" stroke-width="1.4" fill="none">
+          <path pathLength="1" d="M700 900 L-20 560"/>
+          <path pathLength="1" d="M700 900 L260 380"/>
+          <path pathLength="1" d="M700 900 L560 560"/>
+          <path pathLength="1" d="M700 900 L880 440"/>
+          <path pathLength="1" d="M700 900 L1180 360"/>
+          <path pathLength="1" d="M700 900 L1460 470"/>
+        </g>
+
+        <!-- top-left shape -->
+        <path class="art-shape art-a" d="M0 0 H470 C420 120 260 200 0 230 Z" fill="url(#g-fill-a)"/>
+        <path class="art-stroke" pathLength="1" d="M470 -10 C420 120 260 200 -10 236" stroke="url(#g-copper)" stroke-width="1.6" fill="none"/>
+
+        <!-- top-right capsule -->
+        <g transform="translate(1250 300) rotate(-38)">
+          <rect class="art-shape art-b" x="-90" y="-200" width="560" height="300" rx="150" fill="url(#g-fill-a)"/>
+          <rect class="art-stroke" pathLength="1" x="-90" y="-200" width="560" height="300" rx="150" stroke="url(#g-copper)" stroke-width="1.6" fill="none"/>
+        </g>
+
+        <!-- bottom-left dome -->
+        <circle class="art-shape art-c" cx="250" cy="760" r="200" fill="url(#g-fill-b)"/>
+      </svg>
+
+      <div class="container hero-copy">
+        <h1 id="hero-title" class="hero-title">
+          <span class="greeting" aria-hidden="true"><span class="greeting-word" lang="en">Hello</span>,</span>
+          <span class="visually-hidden">Hello, </span>
+          I'm Danil&nbsp;Abramitov
+        </h1>
+        <p class="hero-role">Client service, customer support and computer work, done calmly, carefully and with a smile. Based in Ottawa, fluent in English, Ukrainian and Russian, and I build websites with AI.</p>
+
+        <!-- Ask box: types what I can help with; the buttons are real links -->
+        <div class="ask-box">
+          <p class="ask-text">
+            <span class="visually-hidden">Looking for someone friendly and reliable for client service, customer support or admin work? Let's talk.</span>
+            <span class="ask-typed" aria-hidden="true">Looking for someone friendly at your front desk?</span><span class="ask-caret" aria-hidden="true"></span>
+          </p>
+          <div class="ask-actions">
+            <a class="ask-chip" href="https://www.linkedin.com/in/danil-abramitov-98378844a/" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn
             </a>
-            <a class="btn btn-ghost" href="#projects">
-              <svg class="icon" aria-hidden="true"><use href="#i-arrow-down"/></svg>
-              See my website work
+            <a class="ask-chip" href="https://github.com/DanilAbram" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>GitHub
+            </a>
+            <a class="ask-send" href="mailto:abramitov.danya@gmail.com" aria-label="Email Danil">
+              <span class="ask-send-label">Email me</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
             </a>
           </div>
         </div>
+      </div>
 
-        <!-- Name badge: the page's signature object -->
-        <div class="badge-stage" aria-hidden="true">
-          <div class="lanyard"></div>
-          <div class="badge" data-tilt>
-            <div class="badge-clip"></div>
-            <div class="badge-top">
-              <span>Here to help</span>
-            </div>
-            <div class="badge-body">
-              <div class="badge-avatar">DA</div>
-              <p class="badge-name">Danil</p>
-              <p class="badge-surname">Abramitov</p>
-              <p class="badge-role">Customer Service</p>
-              <div class="badge-langs">
-                <span lang="en">EN</span><span lang="uk">UA</span><span lang="ru">RU</span>
+      <!-- Showcase: four preview tiles -->
+      <div class="container">
+        <ul class="showcase" role="list">
+          <li>
+            <a class="show-card" href="#about">
+              <div class="show-frame frame-light" aria-hidden="true">
+                <div class="badge-mini">
+                  <div class="badge" data-tilt>
+                    <div class="badge-clip"></div>
+                    <div class="badge-top"><span>Here to help</span></div>
+                    <div class="badge-body">
+                      <div class="badge-avatar">DA</div>
+                      <p class="badge-name">Danil</p>
+                      <p class="badge-surname">Abramitov</p>
+                      <p class="badge-role">Customer Service</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="badge-foot">Ask me anything</div>
-          </div>
+              <span class="show-caption">Customer service · About me</span>
+            </a>
+          </li>
+          <li>
+            <a class="show-card" href="#projects">
+              <div class="show-frame frame-dark" aria-hidden="true">
+                <div class="mini-browser mini-browser-sm">
+                  <div class="mini-bar"><span class="mini-dot"></span><span class="mini-dot"></span><span class="mini-dot"></span></div>
+                  <div class="mini-page">
+                    <span class="mini-line mini-line-xl"></span>
+                    <span class="mini-line mini-line-l"></span>
+                    <span class="mini-btn"></span>
+                  </div>
+                </div>
+              </div>
+              <span class="show-caption">This website · Built with AI</span>
+            </a>
+          </li>
+          <li>
+            <a class="show-card" href="#skills">
+              <div class="show-frame frame-blue" aria-hidden="true">
+                <span class="frame-orb"></span>
+                <span class="hello-stack">
+                  <span lang="en">Hello</span>
+                  <span lang="uk">Привіт</span>
+                  <span lang="ru">Привет</span>
+                </span>
+              </div>
+              <span class="show-caption">Three languages · EN, UA, RU</span>
+            </a>
+          </li>
+          <li>
+            <a class="show-card" href="#services">
+              <div class="show-frame frame-light" aria-hidden="true">
+                <div class="sheet">
+                  <span class="sheet-head"></span><span class="sheet-head"></span><span class="sheet-head"></span>
+                  <span></span><span class="is-on"></span><span></span>
+                  <span></span><span></span><span></span>
+                  <span></span><span></span><span class="is-on"></span>
+                </div>
+              </div>
+              <span class="show-caption">Office skills · Word, Excel, Outlook</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Languages & tools strip -->
+      <div class="tools">
+        <p class="tools-title">Languages I speak and tools I use</p>
+        <div class="tools-track" aria-label="English, Ukrainian, Russian, Microsoft Word, Excel, Outlook, PDF, HTML, CSS, JavaScript, AI coding assistants">
+          <ul class="tools-row" role="list" aria-hidden="true">
+            <li>English</li><li lang="uk">Українська</li><li lang="ru">Русский</li><li>Word</li><li>Excel</li><li>Outlook</li><li>PDF</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>AI assistants</li>
+          </ul>
+          <ul class="tools-row" role="list" aria-hidden="true">
+            <li>English</li><li lang="uk">Українська</li><li lang="ru">Русский</li><li>Word</li><li>Excel</li><li>Outlook</li><li>PDF</li><li>HTML</li><li>CSS</li><li>JavaScript</li><li>AI assistants</li>
+          </ul>
         </div>
       </div>
     </section>
