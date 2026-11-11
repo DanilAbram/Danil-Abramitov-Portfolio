@@ -1,0 +1,7 @@
+# Only the website itself is deployed; project notes and dev tools stay out
+.claude
+.impeccable
+docs
+PRODUCT.md
+DESIGN.md
+README.md

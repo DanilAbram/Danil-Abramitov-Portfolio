@@ -1,0 +1,12 @@
+# Personal / machine-only settings
+.claude/settings.local.json
+.impeccable/config.local.json
+
+# OS & editor clutter
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
+
+# Vercel
+.vercel/
