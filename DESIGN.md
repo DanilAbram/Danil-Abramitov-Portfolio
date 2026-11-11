@@ -42,11 +42,11 @@ No blue anywhere: the whole accent family is purple (user's choice).
 
 Each part is a `.screen` (min-height 100svh, vertically centred, `scroll-snap: y proximity`).
 
-1. **Hero**: the greeting cycles "Hello" in 17 widely spoken languages, then "I'm Danil Abramitov", a short line about what he does, and one big "Contact me" button. Background art: inline SVG `.hero-art` with purple gradient shapes, copper `#f2c2a2` outlines and radiating lines, drawn in on load. the "Tools I use" marquee sits at the bottom.
+1. **Hero**: the greeting cycles "Hello" in 17 widely spoken languages, then "I'm Danil Abramitov", a short line about what he does, and one big "Contact me" button. Background art: inline SVG `.hero-art` with purple gradient shapes, copper `#f2c2a2` outlines and radiating lines, drawn in on load. The "Tools I use" marquee sits at the bottom.
 2. **About me**: lead text, tags and a facts list (languages, education, computer), with the swinging name badge on a lanyard to the right.
 3. **What I can make for you**: two offer panels, "A website, built with AI" and "Data entry & admin help". Each has ticks and an "Ask about…" link that pre-selects that service in the form.
 4. **My work**: this website as the project, with a code-drawn mini preview, chips and three build steps.
-5. **Contact** (deep blue band): intro, email, LinkedIn and GitHub links, and the **request form**. The form asks for name, email, an optional phone and business, the service (radio pills), details and a preferred language. Send checks the fields, then opens the visitor's email app with a filled-in `mailto:` (no server).
+5. **Contact** (deep purple band): intro, email, LinkedIn and GitHub links, and the **request form**. The form asks for name, email, an optional phone and business, the service (radio pills), details and a preferred language. Send checks the fields, then opens the visitor's email app with a filled-in `mailto:` (no server).
 
 The header is transparent over the hero and turns solid `--bg` once scrolled. It has a white pill "Contact me" CTA on desktop.
 
