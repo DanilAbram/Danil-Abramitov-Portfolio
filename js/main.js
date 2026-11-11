@@ -258,7 +258,7 @@
 
       window.location.href = href;
       if (statusEl) {
-        statusEl.textContent = 'Your email app should open now. Press send there. If nothing opened, email me at ' + TO + '.';
+        statusEl.textContent = 'Thanks, ' + name + '! Your email app should open now with your message ready. Just press send there. If nothing opened, copy my email on the left and write to me directly.';
         statusEl.classList.add('is-ok');
       }
     });

@@ -58,7 +58,7 @@
           <li><a href="#about">About me</a></li>
           <li><a href="#services">What I make</a></li>
           <li><a href="#work">My work</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li class="nav-contact"><a href="#contact">Contact</a></li>
         </ul>
       </nav>
 
@@ -120,10 +120,16 @@
           I'm Danil&nbsp;Abramitov
         </h1>
         <p class="hero-role">I build simple websites with AI and help with data entry and admin work. Based in Ottawa, and happy to work with you in English, Ukrainian or Russian.</p>
-        <a class="btn btn-primary btn-big" href="#contact">
-          <svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>
-          Contact me
-        </a>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-big" href="#contact">
+            <svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>
+            Contact me
+          </a>
+          <a class="btn btn-ghost btn-big" href="#services">
+            See what I can make
+            <svg class="icon" aria-hidden="true"><use href="#i-arrow-down"/></svg>
+          </a>
+        </div>
       </div>
 
       <!-- Tools strip -->
@@ -271,6 +277,11 @@
               <li>AI-assisted</li>
               <li>Works on phones</li>
             </ul>
+            <a class="btn btn-ghost project-link" href="https://github.com/DanilAbram/Danil-Abramitov-Portfolio" target="_blank" rel="noopener">
+              <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>
+              See the code on GitHub
+              <span class="visually-hidden">(opens in a new tab)</span>
+            </a>
           </div>
         </article>
 
@@ -301,10 +312,14 @@
           <h2 id="contact-title" class="contact-title">Tell me what you need</h2>
           <p class="contact-text">Fill in the form and press Send. Your email app will open with everything filled in, so you just press send there. I usually reply the same day.</p>
           <ul class="contact-alt" role="list">
-            <li><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><a href="mailto:abramitov.danya@gmail.com">abramitov.danya@gmail.com</a></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg><a href="https://www.linkedin.com/in/danil-abramitov-98378844a/" target="_blank" rel="noopener">LinkedIn</a></li>
-            <li><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg><a href="https://github.com/DanilAbram" target="_blank" rel="noopener">GitHub</a></li>
+            <li>
+              <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><a href="mailto:abramitov.danya@gmail.com">abramitov.danya@gmail.com</a>
+              <button class="copy-btn" type="button" data-copy="abramitov.danya@gmail.com"><span class="copy-label">Copy</span><span class="visually-hidden"> email address</span></button>
+            </li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg><a href="https://www.linkedin.com/in/danil-abramitov-98378844a/" target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+            <li><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg><a href="https://github.com/DanilAbram" target="_blank" rel="noopener">GitHub<span class="visually-hidden"> (opens in a new tab)</span></a></li>
           </ul>
+          <p class="visually-hidden" id="copy-status" role="status" aria-live="polite"></p>
         </div>
 
         <form class="request-form reveal" id="request-form" data-delay="80" novalidate>
@@ -372,6 +387,11 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>© <span id="year">2026</span> Danil Abramitov · Ottawa, Canada</p>
+      <ul class="footer-links" role="list" aria-label="Find me online">
+        <li><a href="mailto:abramitov.danya@gmail.com" aria-label="Email"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg></a></li>
+        <li><a href="https://www.linkedin.com/in/danil-abramitov-98378844a/" target="_blank" rel="noopener" aria-label="LinkedIn (opens in a new tab)"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg></a></li>
+        <li><a href="https://github.com/DanilAbram" target="_blank" rel="noopener" aria-label="GitHub (opens in a new tab)"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg></a></li>
+      </ul>
       <a class="to-top" href="#top">
         Back to top
         <svg class="icon" aria-hidden="true"><use href="#i-arrow-up"/></svg>

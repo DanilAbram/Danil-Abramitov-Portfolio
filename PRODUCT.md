@@ -35,7 +35,7 @@ Shared as a link alongside job applications; the downloadable PDF CV remains the
 
 ## Brand Commitments
 
-- Dark-only design in blue (#0771b8 / #58a5fc) with a purple accent, adapted from Anima's site style (user's choice, replaced the earlier white and green).
+- Dark-only design in purple (#6a4fd1 / #b4a6f7), adapted from Anima's site style. User's choice: it replaced the earlier white and green, then blue; no blue anywhere.
 - Should read as a modern website, not a replica of the paper resume layout.
 - No CV download on the site; contact is by email, LinkedIn (danil-abramitov-98378844a) and GitHub (DanilAbram).
 - Work-history section removed at the user's request; the "Websites & AI" section covers only confirmed facts (builds websites with AI; this site is the example).

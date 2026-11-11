@@ -31,10 +31,10 @@ No blue anywhere: the whole accent family is purple (user's choice).
 
 ## Components
 
-- Buttons: 8px radius. `btn-primary` blue fill, white text; `btn-ghost` surface fill, line border, blue text.
+- Buttons: 8px radius. `btn-primary` purple fill, white text; `btn-ghost` surface fill, line border, light text.
 - Chips & tags: 6px radius.
 - Cards/frames (badge, preview frame): 12px radius. Icon tiles: 8px.
-- Services: two-column list rows with hairline tops, not a card grid.
+- Copy button next to the email (for visitors without a mail app). Footer: email, LinkedIn and GitHub icon links + back to top.
 - Websites & AI: code-drawn miniature of this site + three steps.
 - Icons: inline SVG sprite, 24px grid, 1.8–1.9 stroke, round caps.
 
@@ -42,10 +42,10 @@ No blue anywhere: the whole accent family is purple (user's choice).
 
 Each part is a `.screen` (min-height 100svh, vertically centred, `scroll-snap: y proximity`).
 
-1. **Hero**: the greeting cycles "Hello" in 17 widely spoken languages, then "I'm Danil Abramitov", a short line about what he does, and one big "Contact me" button. Background art: inline SVG `.hero-art` with purple gradient shapes, copper `#f2c2a2` outlines and radiating lines, drawn in on load. The "Tools I use" marquee sits at the bottom.
+1. **Hero**: the greeting cycles "Hello" in 17 widely spoken languages, then "I'm Danil Abramitov", a short line about what he does, then "Contact me" (primary) and "See what I can make" (ghost, scrolls to services). Background art: inline SVG `.hero-art` with purple gradient shapes, copper `#f2c2a2` outlines and radiating lines, drawn in on load. The "Tools I use" marquee sits at the bottom.
 2. **About me**: lead text, tags and a facts list (languages, education, computer), with the swinging name badge on a lanyard to the right.
 3. **What I can make for you**: two offer panels, "A website, built with AI" and "Data entry & admin help". Each has ticks and an "Ask about…" link that pre-selects that service in the form.
-4. **My work**: this website as the project, with a code-drawn mini preview, chips and three build steps.
+4. **My work**: this website as the project, with a code-drawn mini preview, chips, a "See the code on GitHub" button and three build steps.
 5. **Contact** (deep purple band): intro, email, LinkedIn and GitHub links, and the **request form**. The form asks for name, email, an optional phone and business, the service (radio pills), details and a preferred language. Send checks the fields, then opens the visitor's email app with a filled-in `mailto:` (no server).
 
 The header is transparent over the hero and turns solid `--bg` once scrolled. It has a white pill "Contact me" CTA on desktop.
@@ -61,3 +61,7 @@ The header is transparent over the hero and turns solid `--bg` once scrolled. It
 
 - Container 1120px, gutter `clamp(1rem, 4vw, 2.5rem)`, section padding `clamp(5rem, 11vw, 7.5rem)`.
 - Breakpoints: 900px (nav → menu, hero stacks), 760px (single-column lists).
+
+## Other pages
+
+- 404.html: the same dark styling, a short message and a button back to the main page (Vercel serves it automatically).

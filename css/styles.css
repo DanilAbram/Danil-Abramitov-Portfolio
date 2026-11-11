@@ -88,6 +88,10 @@ a { color: var(--accent); text-underline-offset: 0.2em; text-decoration-thicknes
 a:hover { text-decoration-thickness: 2px; }
 
 ::selection { background: var(--selection); color: var(--text); }
+input, textarea { caret-color: var(--leaf); }
+
+/* Desktop shows the white "Contact me" pill, so the nav skips its own Contact link */
+@media (min-width: 900px) { .nav-contact { display: none; } }
 
 :focus-visible {
   outline: 3px solid var(--leaf);
@@ -394,24 +398,17 @@ a:hover { text-decoration-thickness: 2px; }
   line-height: 1.5;
 }
 
-.hero-facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 1.4rem;
-  margin-top: 1.75rem;
-  color: var(--text);
-  font-weight: 600;
-  font-size: 1rem;
-}
-.hero-facts li { display: inline-flex; align-items: center; gap: 0.45rem; }
-.hero-facts .icon { color: var(--accent); }
-
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.75rem;
   margin-top: 2.25rem;
 }
+.hero-actions .btn-big { margin-top: 0; }
+.hero-actions .btn-ghost { background: rgba(51, 51, 54, 0.6); color: var(--text); }
+.hero-actions .btn-ghost .icon { color: var(--accent); transition: transform 0.25s var(--ease-out); }
+.hero-actions .btn-ghost:hover .icon { transform: translateY(2px); }
 
 /* ---------- Name badge (signature object) ---------- */
 .badge-stage {
@@ -477,7 +474,7 @@ a:hover { text-decoration-thickness: 2px; }
   transform: translateX(-50%);
   border-radius: 10px 10px 8px 8px;
   background: linear-gradient(var(--clip-1), var(--clip-2));
-  box-shadow: inset 0 -2px 0 rgba(15, 36, 25, 0.12);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.18);
 }
 .badge-clip::after {
   content: "";
@@ -486,7 +483,7 @@ a:hover { text-decoration-thickness: 2px; }
   width: 1.6rem; height: 0.45rem;
   transform: translateX(-50%);
   border-radius: 6px;
-  background: rgba(15, 36, 25, 0.28);
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .badge-top {
@@ -575,8 +572,6 @@ a:hover { text-decoration-thickness: 2px; }
 }
 
 /* ---------- Sections ---------- */
-.section { padding-block: var(--section-y); }
-
 .section-head { margin-bottom: clamp(2.5rem, 5vw, 3.5rem); max-width: 40rem; }
 
 .section-title {
@@ -634,19 +629,6 @@ a:hover { text-decoration-thickness: 2px; }
 
 /* What I can do */
 .services { background: var(--tint); }
-.service-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  column-gap: clamp(2rem, 6vw, 5rem);
-}
-.service {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 1.25rem;
-  padding-block: 2rem;
-  border-top: 1px solid var(--line);
-}
-.service-icon,
 .step-icon {
   width: 3rem; height: 3rem;
   padding: 0.7rem;
@@ -661,16 +643,9 @@ a:hover { text-decoration-thickness: 2px; }
   box-shadow: var(--shadow-soft);
   transition: transform 0.3s var(--ease-out), background-color 0.3s, color 0.3s;
 }
-.service:hover .service-icon { transform: translateY(-2px) rotate(-6deg); background: var(--accent-strong); color: var(--on-accent); }
-.service h3 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  color: var(--text);
-}
-.service p { margin-top: 0.5rem; color: var(--text-muted); }
+.step:hover .step-icon { transform: translateY(-2px) rotate(-6deg); background: var(--accent-strong); color: var(--on-accent); }
 
-/* Websites & AI */
+/* My work */
 .project {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
@@ -717,30 +692,11 @@ a:hover { text-decoration-thickness: 2px; }
 .mini-nav { display: flex; justify-content: space-between; align-items: center; }
 .mini-logo { width: 1.1rem; height: 1.1rem; border-radius: 4px; background: var(--accent-strong); }
 .mini-links { width: 45%; height: 0.4rem; border-radius: 6px; background: var(--tint-2); }
-.mini-hero {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 1rem;
-  align-items: center;
-  margin-top: 1.1rem;
-}
-.mini-copy { display: grid; gap: 0.45rem; }
 .mini-line { display: block; height: 0.55rem; border-radius: 6px; background: var(--text); opacity: 0.85; }
 .mini-line-xl { width: 70%; height: 0.8rem; background: var(--accent); opacity: 1; }
 .mini-line-l { width: 92%; height: 0.8rem; }
 .mini-line-m { width: 60%; background: var(--text-muted); opacity: 0.5; }
 .mini-btn { width: 38%; height: 1rem; margin-top: 0.35rem; border-radius: 6px; background: var(--accent-strong); }
-.mini-badge {
-  justify-self: center;
-  width: 70%;
-  aspect-ratio: 3 / 4;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  overflow: hidden;
-  transform: rotate(-4deg);
-}
-.mini-badge span { display: block; height: 22%; background: var(--accent-strong); }
 .mini-rows {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -757,6 +713,8 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .project-body p { margin-top: 0.85rem; color: var(--text-muted); max-width: 52ch; }
 .project-body .chips { margin-top: 1.5rem; }
+.project-link { margin-top: 1.75rem; color: var(--text); }
+.project-link .icon { color: var(--accent); }
 
 .steps {
   display: grid;
@@ -780,19 +738,7 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .step p { margin-top: 0.4rem; color: var(--text-muted); }
 
-/* Skills */
-.skills { border-top: 1px solid var(--line); }
-.skills-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(2.5rem, 5vw, 3.5rem) clamp(2rem, 6vw, 5rem);
-}
-.skill-group h3 {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--accent);
-  margin-bottom: 1.1rem;
-}
+/* Chips */
 .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .chips li {
   padding: 0.4rem 0.85rem;
@@ -806,41 +752,11 @@ a:hover { text-decoration-thickness: 2px; }
 .chips li:hover { border-color: var(--leaf); background: var(--tint); }
 .chips-small li { font-size: 0.92rem; padding: 0.3rem 0.75rem; }
 
-.langs > div {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-block: 0.8rem;
-  border-bottom: 1px solid var(--line);
-}
-.langs > div:first-child { padding-top: 0; }
-.langs dt { font-weight: 600; font-size: 1.1rem; }
-.langs dd {
-  padding: 0.2rem 0.75rem;
-  border-radius: 6px;
-  background: var(--tint);
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.edu { display: flex; gap: 1rem; align-items: flex-start; }
-.edu-icon {
-  width: 3rem; height: 3rem;
-  padding: 0.7rem;
-  border-radius: 8px;
-  background: var(--tint);
-  color: var(--accent);
-}
-.edu-title { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; }
-.edu-meta { color: var(--text-muted); margin-top: 0.2rem; }
-
 /* Contact: the closing band */
 .contact {
   background: var(--band);
   color: var(--band-text);
 }
-.contact-inner { max-width: 50rem; text-align: center; }
 .contact-title {
   font-size: clamp(2.1rem, 4.6vw, 3.4rem);
   letter-spacing: -0.02em;
@@ -852,58 +768,21 @@ a:hover { text-decoration-thickness: 2px; }
   font-size: 1.15rem;
 }
 
-.contact-email {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 0.75rem 1rem;
-  margin-top: 2.25rem;
-}
-.email-link {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(1.25rem, 3.4vw, 2rem);
-  letter-spacing: -0.02em;
-  color: var(--band-text);
-  text-decoration: underline;
-  text-decoration-color: var(--leaf);
-  text-decoration-thickness: 3px;
-  text-underline-offset: 0.25em;
-  overflow-wrap: anywhere;
-}
-.email-link:hover { text-decoration-color: var(--band-text); }
-
-.contact .btn-ghost {
-  background: transparent;
-  color: var(--band-text);
-  border-color: var(--band-line);
-}
-.contact .btn-ghost:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--band-text); }
-.copy-btn.is-copied { background: var(--accent-strong) !important; border-color: var(--accent-strong) !important; color: #fff !important; }
-
-.socials {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 2.5rem;
-}
-.socials a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  min-height: 3rem;
-  padding: 0.7rem 1.25rem;
-  border-radius: 8px;
+.copy-btn {
+  min-height: 2rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid var(--band-line);
   background: rgba(255, 255, 255, 0.08);
   color: var(--band-text);
-  font-family: var(--font-display);
+  font: inherit;
+  font-size: 0.85rem;
   font-weight: 700;
-  text-decoration: none;
-  transition: background-color 0.2s, transform 0.2s var(--ease-out);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
 }
-.socials a:hover { background: rgba(255, 255, 255, 0.16); transform: translateY(-1px); }
+.copy-btn:hover { background: rgba(255, 255, 255, 0.16); border-color: rgba(255, 255, 255, 0.4); }
+.copy-btn.is-copied { background: #ffffff; border-color: #ffffff; color: var(--band); }
 .contact :focus-visible { outline-color: var(--band-text); }
 
 /* Footer */
@@ -930,6 +809,17 @@ a:hover { text-decoration-thickness: 2px; }
   text-decoration: none;
 }
 .to-top:hover { text-decoration: underline; }
+.footer-links { display: flex; gap: 0.35rem; }
+.footer-links a {
+  display: grid;
+  place-items: center;
+  width: 2.5rem; height: 2.5rem;
+  border-radius: 8px;
+  color: var(--band-text);
+  transition: background-color 0.2s;
+}
+.footer-links a:hover { background: rgba(255, 255, 255, 0.12); }
+.footer-links .icon { width: 1.2rem; height: 1.2rem; }
 .site-footer :focus-visible { outline-color: var(--band-text); }
 
 /* ---------- Header CTA (white pill) ---------- */
@@ -1057,7 +947,7 @@ html { scroll-snap-type: y proximity; }
 .contact-intro .contact-title { text-align: left; }
 .contact-intro .contact-text { text-align: left; }
 .contact-alt { display: grid; gap: 0.75rem; margin-top: 2rem; }
-.contact-alt li { display: flex; align-items: center; gap: 0.6rem; color: var(--band-muted); }
+.contact-alt li { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; color: var(--band-muted); }
 .contact-alt a { color: var(--band-text); font-weight: 600; overflow-wrap: anywhere; }
 
 .request-form {
@@ -1192,8 +1082,8 @@ html.js .reveal.is-visible { opacity: 1; transform: none; }
 
 @media (max-width: 759px) {
   body { font-size: 1.0625rem; }
-  .service-list { grid-template-columns: 1fr; }
-  .skills-grid { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; align-items: stretch; width: 100%; max-width: 22rem; }
+  .hero-actions .btn-big { justify-content: center; }
   .field-row { grid-template-columns: 1fr; }
   .facts > div { grid-template-columns: 1fr; gap: 0.15rem; }
   .form-foot .btn-big { width: 100%; justify-content: center; }
@@ -1218,11 +1108,11 @@ html.js .reveal.is-visible { opacity: 1; transform: none; }
 
 /* ---------- Print ---------- */
 @media print {
-  .site-header, .skip-link, .badge-stage, .hero-actions, .copy-btn, .socials, .site-footer, .hero::before, .project-preview { display: none !important; }
+  .site-header, .skip-link, .badge-stage, .hero-actions, .hero-art, .tools, .copy-btn, .request-form, .site-footer, .project-preview, .project-link { display: none !important; }
   body { font-size: 11pt; color: #000; background: #fff; }
-  .section, .hero { padding-block: 1.25rem; }
+  .screen { min-height: 0; padding-block: 1.25rem !important; }
   .services, .contact { background: none; color: #000; }
-  .contact-title, .email-link { color: #000; }
+  .contact-title, .contact-text, .contact-alt a { color: #000; }
   html.js .reveal { opacity: 1; transform: none; }
-  .hero-grid, .project { grid-template-columns: 1fr; }
+  .project, .contact-grid, .about-grid { grid-template-columns: 1fr !important; }
 }
