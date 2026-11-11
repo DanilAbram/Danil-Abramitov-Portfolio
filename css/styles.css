@@ -537,15 +537,6 @@ input, textarea { caret-color: var(--leaf); }
   font-size: 1.05rem;
   color: var(--text-muted);
 }
-.badge-role {
-  margin-top: 1rem;
-  padding: 0.3rem 0.85rem;
-  border-radius: 6px;
-  background: var(--tint);
-  color: var(--accent);
-  font-weight: 600;
-  font-size: 0.95rem;
-}
 .badge-langs {
   display: flex;
   gap: 0.4rem;
@@ -563,13 +554,24 @@ input, textarea { caret-color: var(--leaf); }
   color: var(--accent);
 }
 .badge-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 3rem;
   padding: 0.85rem;
   border-top: 1px dashed var(--line);
-  color: var(--text-muted);
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-align: center;
+  border-radius: 0 0 11px 11px;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: background-color 0.2s, color 0.2s;
 }
+.badge-foot .icon { transition: transform 0.25s var(--ease-out); }
+.badge-foot:hover { background: var(--accent-strong); color: var(--on-accent); text-decoration: none; }
+.badge-foot:hover .icon { transform: translateX(3px); }
+.badge-langs { margin-top: 1.25rem; }
 
 /* ---------- Sections ---------- */
 .section-head { margin-bottom: clamp(2.5rem, 5vw, 3.5rem); max-width: 40rem; }
@@ -1189,7 +1191,7 @@ html.js .badge-stage.is-visible .badge { animation-play-state: running; }
 .stack-on .contact,
 .stack-on .site-footer { position: relative; }
 html.stack-on { scroll-snap-type: none; }
-html.measuring .stack { position: relative; transform: none; }
+html.measuring .stack { position: relative; top: auto; transform: none; }
 
 /* Site preview straightens as it scrolls into view */
 .mini-browser { transform: rotate(calc(-1.5deg - (1 - var(--work-p, 1)) * 5deg)) translateY(calc((1 - var(--work-p, 1)) * 30px)); }

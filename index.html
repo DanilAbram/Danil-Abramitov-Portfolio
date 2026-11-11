@@ -182,21 +182,23 @@
         </div>
 
         <!-- Name badge -->
-        <div class="badge-stage reveal" data-delay="120" aria-hidden="true">
-          <div class="lanyard"></div>
+        <div class="badge-stage reveal" data-delay="120">
+          <div class="lanyard" aria-hidden="true"></div>
           <div class="badge" data-tilt>
-            <div class="badge-clip"></div>
-            <div class="badge-top"><span>Here to help</span></div>
-            <div class="badge-body">
+            <div class="badge-clip" aria-hidden="true"></div>
+            <div class="badge-top" aria-hidden="true"><span>Here to help</span></div>
+            <div class="badge-body" aria-hidden="true">
               <div class="badge-avatar">DA</div>
               <p class="badge-name">Danil</p>
               <p class="badge-surname">Abramitov</p>
-              <p class="badge-role">Ottawa, ON</p>
               <div class="badge-langs">
                 <span lang="en">EN</span><span lang="uk">UA</span><span lang="ru">RU</span>
               </div>
             </div>
-            <div class="badge-foot">Ask me anything</div>
+            <a class="badge-foot" href="#contact">
+              Ask me anything
+              <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+            </a>
           </div>
         </div>
       </div>
