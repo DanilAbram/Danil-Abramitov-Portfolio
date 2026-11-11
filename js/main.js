@@ -269,12 +269,48 @@
     });
   });
 
-  // Request form: checks the fields, then opens the visitor's email app
-  // with everything filled in (no server needed)
+  // Request form: checks the fields, then sends the request to Danil's
+  // inbox through FormSubmit (no server of our own). Falls back to a
+  // ready-made email if the service can't be reached.
   var form = document.getElementById('request-form');
   if (form) {
     var TO = 'abramitov.danya@gmail.com';
+    var ENDPOINT = 'https://formsubmit.co/ajax/' + TO;
     var statusEl = document.getElementById('form-status');
+    var doneEl = document.getElementById('form-done');
+    var sendBtn = form.querySelector('.send-btn');
+    var sendLabel = form.querySelector('.send-label');
+    var sending = false;
+
+    var setSending = function (on) {
+      sending = on;
+      form.classList.toggle('is-sending', on);
+      form.setAttribute('aria-busy', on ? 'true' : 'false');
+      if (sendBtn) sendBtn.disabled = on;
+      if (sendLabel) sendLabel.textContent = on ? 'Sending…' : 'Send request';
+    };
+
+    // kind: '' | 'error'; mailHref adds an "email me instead" link
+    var showStatus = function (text, kind, mailHref) {
+      if (!statusEl) return;
+      statusEl.textContent = text;
+      statusEl.className = 'form-status' + (kind ? ' is-' + kind : '');
+      if (mailHref) {
+        var a = document.createElement('a');
+        a.href = mailHref;
+        a.textContent = 'email it to me instead';
+        statusEl.appendChild(a);
+        statusEl.appendChild(document.createTextNode('.'));
+      }
+    };
+
+    var showDone = function (name, email) {
+      document.getElementById('done-name').textContent = name;
+      document.getElementById('done-email').textContent = email;
+      form.hidden = true;
+      doneEl.hidden = false;
+      doneEl.focus();
+    };
 
     var setError = function (id, fieldEl, msg) {
       var err = document.getElementById(id);
@@ -309,33 +345,76 @@
       check(details.length > 0, 'f-details-error', form.elements.details, 'Please tell me a little about what you need.');
 
       if (firstBad) {
-        if (statusEl) { statusEl.textContent = 'Please fix the highlighted fields.'; statusEl.classList.remove('is-ok'); }
+        showStatus('Please fix the highlighted fields.', 'error');
         firstBad.focus();
         return;
       }
+      if (sending) return;
 
-      var lines = [
-        'Name: ' + name,
-        'Email: ' + email,
-        phone ? 'Phone: ' + phone : null,
-        company ? 'Business: ' + company : null,
-        'Service: ' + service,
-        '',
-        'What I need:',
-        details
-      ].filter(function (l) { return l !== null; });
+      // Bots fill the hidden field: act as if it worked, send nothing
+      if (form.elements._honey && form.elements._honey.value) { showDone(name, email); return; }
 
-      var subject = 'New request: ' + service + ' (' + name + ')';
-      var href = 'mailto:' + TO +
-        '?subject=' + encodeURIComponent(subject) +
-        '&body=' + encodeURIComponent(lines.join('\n'));
+      var subject = 'New request: ' + service + ' from ' + name + (company ? ' (' + company + ')' : '');
+      var payload = {
+        name: name,
+        email: email,
+        phone: phone || '-',
+        company: company || '-',
+        service: service,
+        message: details,
+        _subject: subject,
+        _template: 'table',
+        _captcha: 'false'
+      };
 
-      window.location.href = href;
-      if (statusEl) {
-        statusEl.textContent = 'Thanks, ' + name + '! Your email app should open now with your message ready. Just press send there. If nothing opened, copy my email on the left and write to me directly.';
-        statusEl.classList.add('is-ok');
-      }
+      // Ready-made email as a backup if the service can't be reached
+      var mailBody = [
+        'Name: ' + name, 'Email: ' + email,
+        phone ? 'Phone: ' + phone : null, company ? 'Business: ' + company : null,
+        'Service: ' + service, '', details
+      ].filter(function (l) { return l !== null; }).join('\n');
+      var mailHref = 'mailto:' + TO + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(mailBody);
+
+      setSending(true);
+      showStatus('', '');
+      var controller = 'AbortController' in window ? new AbortController() : null;
+      var timer = setTimeout(function () { if (controller) controller.abort(); }, 15000);
+
+      fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller ? controller.signal : undefined
+      })
+        .then(function (res) {
+          return res.json().catch(function () { return {}; }).then(function (data) {
+            if (!res.ok || String(data.success) !== 'true') throw new Error(data.message || 'Send failed');
+          });
+        })
+        .then(function () { showDone(name, email); })
+        .catch(function () {
+          if (navigator.onLine === false) {
+            showStatus('You seem to be offline. Check your connection and press Send request again.', 'error');
+          } else {
+            showStatus('Sorry, your request didn’t go through. Please try again, or ', 'error', mailHref);
+          }
+        })
+        .then(function () {
+          clearTimeout(timer);
+          setSending(false);
+        });
     });
+
+    var sendAnother = document.getElementById('send-another');
+    if (sendAnother) {
+      sendAnother.addEventListener('click', function () {
+        form.reset();
+        doneEl.hidden = true;
+        form.hidden = false;
+        showStatus('', '');
+        form.elements.name.focus();
+      });
+    }
 
     // Clear an error as soon as the visitor fixes the field
     form.addEventListener('input', function (e) {

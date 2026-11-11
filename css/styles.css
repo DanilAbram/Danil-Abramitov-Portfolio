@@ -1019,8 +1019,64 @@ html { scroll-snap-type: y proximity; }
 .form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
 .form-foot .btn-big { margin-top: 0.25rem; background: #ffffff; color: #35286f; box-shadow: none; }
 .form-foot .btn-big:hover { background: #ece8fb; }
-.form-status { color: var(--band-muted); font-size: 0.95rem; }
-.form-status.is-ok { color: #ffffff; }
+.form-note { color: var(--band-muted); font-size: 0.9rem; }
+.form-status:empty { display: none; }
+.form-status {
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--band-text);
+  background: rgba(255, 255, 255, 0.08);
+}
+.form-status.is-error { background: rgba(255, 140, 120, 0.14); border: 1px solid rgba(255, 180, 168, 0.45); color: #ffe1dc; }
+.form-status a { color: #ffffff; font-weight: 700; }
+
+/* Send button: spinner while sending */
+.send-btn .spinner {
+  display: none;
+  width: 1.1em; height: 1.1em;
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  animation: spin 0.7s linear infinite;
+}
+.is-sending .send-btn .spinner { display: inline-block; }
+.is-sending .send-btn .send-icon { display: none; }
+.send-btn:disabled { cursor: progress; opacity: 0.85; transform: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Spam trap stays off screen */
+.hp-field { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* Thank-you panel after a successful send */
+.form-done {
+  display: grid;
+  justify-items: start;
+  gap: 0.9rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid var(--band-line);
+  animation: done-in 0.6s var(--ease-out) both;
+}
+.form-done[hidden],
+.request-form[hidden] { display: none; }
+.form-done:focus { outline: none; }
+.done-mark {
+  display: grid;
+  place-items: center;
+  width: 3.25rem; height: 3.25rem;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--band);
+}
+.done-mark .icon { width: 1.6rem; height: 1.6rem; stroke-width: 2.4; }
+.done-title { font-family: var(--font-serif); font-weight: 400; font-size: clamp(1.6rem, 3vw, 2.1rem); color: var(--band-text); }
+.form-done p { color: var(--band-muted); }
+.form-done strong { color: var(--band-text); overflow-wrap: anywhere; }
+.done-again { margin-top: 0.5rem; background: transparent; color: var(--band-text); border-color: var(--band-line); }
+.done-again:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--band-text); }
+@keyframes done-in { from { opacity: 0; transform: translateY(12px) scale(0.98); } }
 
 /* ---------- Languages & tools strip ---------- */
 .tools {
@@ -1164,6 +1220,7 @@ html.measuring .stack { position: relative; transform: none; }
   .field-row { grid-template-columns: 1fr; }
   .facts > div { grid-template-columns: 1fr; gap: 0.15rem; }
   .form-foot .btn-big { width: 100%; justify-content: center; }
+  .form-note { width: 100%; text-align: center; }
   .footer-inner { justify-content: center; text-align: center; }
 }
 

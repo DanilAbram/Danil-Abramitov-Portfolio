@@ -46,7 +46,7 @@ Each part is a `.screen` (min-height 100svh, vertically centred). **Page stack:*
 2. **About me**: lead text, tags and a facts list (languages, education, computer), with the swinging name badge on a lanyard to the right.
 3. **What I can make for you**: two offer panels, "A website, built with AI" and "Data entry & admin help". Each has ticks and an "Ask about…" link that pre-selects that service in the form.
 4. **My work**: this website as the project, with a code-drawn mini preview, chips, a "See the code on GitHub" button and three build steps.
-5. **Contact** (deep purple band): title "Tell Me What Your Company Needs", intro, email, LinkedIn and GitHub links, and the **request form**. The form asks for name, email, an optional phone and business, the service (radio pills) and details. Send checks the fields, then opens the visitor's email app with a filled-in `mailto:` (no server).
+5. **Contact** (deep purple band): title "Tell Me What Your Company Needs", intro, email, LinkedIn and GitHub links, and the **request form**. The form asks for name, email, an optional phone and business, the service (radio pills) and details. "Send request" checks the fields, then posts JSON to FormSubmit (`formsubmit.co/ajax/<email>`), which emails the request to Danil. States: spinner + "Sending…" (button disabled); a thank-you panel replacing the form (with "Send another request"); an error box with an "email it to me instead" mailto backup. A hidden honeypot field (`_honey`) stops bots.
 
 The header is transparent over the hero and turns solid `--bg` once scrolled. It has a white pill "Contact me" CTA on desktop.
 

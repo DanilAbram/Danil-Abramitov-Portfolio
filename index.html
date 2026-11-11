@@ -312,7 +312,7 @@
       <div class="container contact-grid">
         <div class="contact-intro reveal">
           <h2 id="contact-title" class="contact-title">Tell Me What Your Company Needs</h2>
-          <p class="contact-text">Fill in the form and press Send. Your email app will open with everything filled in, so you just press send there. I usually reply the same day.</p>
+          <p class="contact-text">Fill in the form and press Send request. It comes straight to my inbox, and I usually reply the same day.</p>
           <ul class="contact-alt" role="list">
             <li>
               <svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg><a href="mailto:abramitov.danya@gmail.com">abramitov.danya@gmail.com</a>
@@ -324,6 +324,7 @@
           <p class="visually-hidden" id="copy-status" role="status" aria-live="polite"></p>
         </div>
 
+        <div class="form-panel">
         <form class="request-form reveal" id="request-form" data-delay="80" novalidate>
           <div class="field-row">
             <div class="field">
@@ -365,21 +366,38 @@
             <p class="field-error" id="f-details-error"></p>
           </div>
 
-          <div class="form-foot">
-            <button class="btn btn-primary btn-big" type="submit">
-              <svg class="icon" aria-hidden="true"><use href="#i-send"/></svg>
-              Send
-            </button>
-            <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
+          <!-- Spam trap: hidden from people, bots fill it in -->
+          <div class="hp-field" aria-hidden="true">
+            <label for="f-hp">Leave this empty</label>
+            <input id="f-hp" name="_honey" type="text" tabindex="-1" autocomplete="off">
           </div>
+
+          <div class="form-foot">
+            <button class="btn btn-primary btn-big send-btn" type="submit">
+              <svg class="icon send-icon" aria-hidden="true"><use href="#i-send"/></svg>
+              <span class="spinner" aria-hidden="true"></span>
+              <span class="send-label">Send request</span>
+            </button>
+            <p class="form-note">Your details are only used to reply to you.</p>
+          </div>
+          <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
         </form>
+
+        <!-- Shown after a successful send -->
+        <div class="form-done" id="form-done" tabindex="-1" hidden>
+          <span class="done-mark" aria-hidden="true"><svg class="icon"><use href="#i-tick"/></svg></span>
+          <h3 class="done-title">Thank you, <span id="done-name"></span>!</h3>
+          <p>Your request is on its way to me. I'll reply to <strong id="done-email"></strong>, usually the same day.</p>
+          <button class="btn btn-ghost done-again" type="button" id="send-another">Send another request</button>
+        </div>
+        </div>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>© <span id="year">2026</span> Danil Abramitov · Ottawa, Canada</p>
+      <p>© <span id="year">2026</span> Danil Abramitov</p>
       <ul class="footer-links" role="list" aria-label="Find me online">
         <li><a href="mailto:abramitov.danya@gmail.com" aria-label="Email"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg></a></li>
         <li><a href="https://www.linkedin.com/in/danil-abramitov-98378844a/" target="_blank" rel="noopener" aria-label="LinkedIn (opens in a new tab)"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg></a></li>
