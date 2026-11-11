@@ -55,7 +55,8 @@ The header is transparent over the hero and turns solid `--bg` once scrolled. It
 - The hero greeting changes every 2s. Arabic is set `dir="rtl"`.
 - Hero art draws in once; tools strip scrolls continuously.
 - Badge swings in on load, tilts toward the pointer on fine pointers.
-- Sections fade up once on scroll. All motion off under `prefers-reduced-motion`.
+- Scroll: a 3px purple progress line under the header; the hero copy drifts up and fades while the background art moves slower (depth); sections rise in from a soft blur; lists inside them (tags, facts, ticks, chips, contact links, form fields) arrive one by one (70ms apart); section underlines draw in; the badge swings only when its section is reached; the site preview straightens as it scrolls into view.
+- Scroll values are written as CSS variables once per animation frame (--progress, --hero-p, --work-p). All motion is off under prefers-reduced-motion.
 
 ## Layout
 

@@ -68,6 +68,46 @@
     sections.forEach(function (s) { spy.observe(s); });
   }
 
+  // Lists that appear one item after another once their block is revealed
+  document.querySelectorAll('.tags, .facts, .offer-list, .project .chips, .contact-alt, .request-form').forEach(function (list) {
+    list.classList.add('stagger');
+    Array.prototype.forEach.call(list.children, function (child, i) {
+      child.style.setProperty('--i', i);
+    });
+  });
+
+  // Scroll-linked motion: progress line, hero depth, site preview straightening.
+  // Writes CSS variables once per frame; CSS does the drawing.
+  var root = document.documentElement;
+  var hero = document.querySelector('.hero');
+  var work = document.querySelector('.mini-browser');
+  if (!reduceMotion) {
+    var ticking = false;
+    var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+    var update = function () {
+      ticking = false;
+      var vh = window.innerHeight;
+      var max = root.scrollHeight - vh;
+      root.style.setProperty('--progress', max > 0 ? clamp01(window.scrollY / max).toFixed(4) : 0);
+      if (hero) {
+        var hp = clamp01(window.scrollY / (hero.offsetHeight || vh));
+        hero.style.setProperty('--hero-p', hp.toFixed(4));
+      }
+      if (work) {
+        var r = work.getBoundingClientRect();
+        // 0 when the preview's top is at the bottom of the screen, 1 once it is 40% up
+        var wp = clamp01((vh - r.top) / (vh * 0.6));
+        work.style.setProperty('--work-p', wp.toFixed(4));
+      }
+    };
+    var onMove = function () {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    };
+    window.addEventListener('scroll', onMove, { passive: true });
+    window.addEventListener('resize', onMove);
+    update();
+  }
+
   // Reveal on scroll
   var reveals = document.querySelectorAll('.reveal');
   reveals.forEach(function (el) {

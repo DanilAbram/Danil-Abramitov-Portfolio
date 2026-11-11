@@ -596,7 +596,7 @@ input, textarea { caret-color: var(--leaf); }
 }
 
 /* About */
-.about { border-top: 1px solid var(--line); }
+.about { border-top: 1px solid var(--line); overflow-x: clip; }
 .about-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.6fr);
@@ -1053,13 +1053,64 @@ html { scroll-snap-type: y proximity; }
 }
 @keyframes marquee { to { transform: translateX(-100%); } }
 
-/* ---------- Reveal on scroll ---------- */
+/* ---------- Scroll motion ---------- */
+
+/* Thin reading-progress line under the header */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 60;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-strong), var(--accent));
+  transform-origin: 0 50%;
+  transform: scaleX(var(--progress, 0));
+  pointer-events: none;
+}
+
+/* Hero: copy drifts up and fades, background shapes move slower (depth) */
+.hero-copy,
+.hero .tools { will-change: transform, opacity; }
+.hero-copy {
+  transform: translate3d(0, calc(var(--hero-p, 0) * -70px), 0);
+  opacity: calc(1 - var(--hero-p, 0) * 1.1);
+}
+.hero .tools { opacity: calc(1 - var(--hero-p, 0) * 1.6); }
+.hero-art { transform: translate3d(0, calc(var(--hero-p, 0) * 140px), 0) scale(calc(1 + var(--hero-p, 0) * 0.06)); }
+
+/* Sections rise in, soft blur to sharp */
 html.js .reveal {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.7s var(--ease-out), transform 0.7s var(--ease-out);
+  transform: translateY(32px);
+  filter: blur(6px);
+  transition: opacity 0.9s var(--ease-out), transform 1s var(--ease-out), filter 0.9s var(--ease-out);
 }
-html.js .reveal.is-visible { opacity: 1; transform: none; }
+html.js .reveal.is-visible { opacity: 1; transform: none; filter: none; }
+
+/* Lists inside a revealed block arrive one item after another */
+html.js .stagger > * {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.6s var(--ease-out), transform 0.7s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms + 200ms);
+}
+html.js .is-visible .stagger > *,
+html.js .stagger.is-visible > * { opacity: 1; transform: none; }
+
+/* Section underline draws in after its title */
+html.js .section-title::after {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-out) 0.35s;
+}
+html.js .section-title.is-visible::after,
+html.js .is-visible .section-title::after { transform: scaleX(1); }
+
+/* Badge swings only once you reach it */
+html.js .badge { animation-play-state: paused; }
+html.js .badge-stage.is-visible .badge { animation-play-state: running; }
+
+/* Site preview straightens as it scrolls into view */
+.mini-browser { transform: rotate(calc(-1.5deg - (1 - var(--work-p, 1)) * 5deg)) translateY(calc((1 - var(--work-p, 1)) * 30px)); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 899px) {
@@ -1103,7 +1154,11 @@ html.js .reveal.is-visible { opacity: 1; transform: none; }
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  html.js .reveal { opacity: 1; transform: none; }
+  html.js .reveal,
+  html.js .stagger > * { opacity: 1; transform: none; filter: none; }
+  .hero-copy, .hero .tools, .hero-art, .mini-browser { transform: none !important; opacity: 1 !important; }
+  html.js .section-title::after { transform: none; }
+  .scroll-progress { display: none; }
 }
 
 /* ---------- Print ---------- */
