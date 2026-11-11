@@ -36,4 +36,5 @@ logos are trademarks of their owners.
 
 ## Fonts
 
-Young Serif and Mulish, served by Google Fonts (SIL Open Font License).
+Young Serif and Mulish (SIL Open Font License), self-hosted in `assets/fonts/`
+(woff2 files as published by Google Fonts).

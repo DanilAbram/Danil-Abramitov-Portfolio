@@ -13,9 +13,9 @@
   <meta property="og:description" content="Professional, user-friendly websites built with AI tools, plus reliable data entry and administrative support tailored to your business needs.">
 
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;800&family=Young+Serif&display=swap" rel="stylesheet">
+  <!-- Fonts are self-hosted: fetched in parallel with the CSS, no third-party wait -->
+  <link rel="preload" href="assets/fonts/mulish-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/young-serif-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/styles.css">
   <script>document.documentElement.classList.add('js');</script>
   <script src="js/main.js" defer></script>
@@ -194,7 +194,7 @@
             <div class="badge-top" aria-hidden="true"><span>Here to help</span></div>
             <div class="badge-body">
               <div class="badge-avatar">
-                <img src="assets/danil.webp" alt="Danil Abramitov" width="1275" height="1233" decoding="async">
+                <img src="assets/danil-avatar.webp" alt="Danil Abramitov" width="256" height="256" decoding="async">
               </div>
               <p class="badge-name" aria-hidden="true">Danil</p>
               <p class="badge-surname" aria-hidden="true">Abramitov</p>

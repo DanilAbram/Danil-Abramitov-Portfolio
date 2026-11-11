@@ -11,13 +11,6 @@
   var navLinks = nav ? Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]')) : [];
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Header shadow/background once the page is scrolled
-  function onScroll() {
-    if (header) header.classList.toggle('is-scrolled', window.scrollY > 8);
-  }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
   // Mobile nav
   function setMenu(open) {
     if (!toggle) return;
@@ -50,33 +43,6 @@
     else if (desktop.addListener) desktop.addListener(onChange);
   }
 
-  // Sections in page order. Their normal-flow tops are measured (with
-  // sticky turned off) so the nav highlight stays right while pages stack.
-  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
-  var flowTops = [];
-  var currentHash = null;
-  function measureFlow() {
-    document.documentElement.classList.add('measuring');
-    flowTops = sections.map(function (s) { return s.getBoundingClientRect().top + window.scrollY; });
-    document.documentElement.classList.remove('measuring');
-  }
-  function updateNav() {
-    if (!navLinks.length || !flowTops.length) return;
-    var line = window.scrollY + window.innerHeight * 0.45;
-    var hash = null;
-    for (var i = 0; i < sections.length; i++) {
-      if (flowTops[i] <= line) hash = '#' + sections[i].id;
-    }
-    if (hash === currentHash) return;
-    currentHash = hash;
-    navLinks.forEach(function (link) {
-      var active = link.getAttribute('href') === hash;
-      link.classList.toggle('is-active', active);
-      if (active) link.setAttribute('aria-current', 'true');
-      else link.removeAttribute('aria-current');
-    });
-  }
-
   // Lists that appear one item after another once their block is revealed
   document.querySelectorAll('.tags, .facts, .offer-list, .project .chips, .contact-alt, .request-form').forEach(function (list) {
     list.classList.add('stagger');
@@ -85,64 +51,117 @@
     });
   });
 
-  // Scroll-linked motion: progress line, hero depth, site preview straightening.
-  // Writes CSS variables once per frame; CSS does the drawing.
+  // ---------- Scroll-linked effects ----------
+  // Header background, nav highlight, progress line, hero depth, page stack
+  // and the site preview all run from one per-frame update.
+  // Layout is only READ in measure() (on load, resize and font changes),
+  // all reads first, then writes. Scrolling itself does plain math with the
+  // cached numbers, so it never forces the browser to recalculate layout.
   var root = document.documentElement;
+  var main = document.querySelector('main');
   var hero = document.querySelector('.hero');
   var work = document.querySelector('.mini-browser');
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
   // Page stack: every screen except the last sticks and is covered by the next
   var stack = reduceMotion ? [] : sections.slice(0, -1);
   stack.forEach(function (s) { s.classList.add('stack'); });
   if (stack.length) root.classList.add('stack-on');
-  function measureStack() {
+
+  var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
+  var m = { vh: window.innerHeight, docH: 0, tops: [], heroH: 0, workTop: 0 };
+  var currentHash;
+  var scrolledState;
+
+  // Offset of an element from the top of its section, ignoring sticky/transforms
+  function offsetWithin(el, section) {
+    var y = 0;
+    while (el && el !== section) { y += el.offsetTop; el = el.offsetParent; }
+    return y;
+  }
+
+  function measure() {
+    // ---- reads ----
     var vh = window.innerHeight;
-    stack.forEach(function (s) {
+    var heights = sections.map(function (s) { return s.offsetHeight; });
+    var start = main.offsetTop + (parseFloat(getComputedStyle(sections[0]).marginTop) || 0);
+    var tops = [];
+    heights.reduce(function (y, h, i) { tops[i] = y; return y + h; }, start);
+    var workSection = work ? work.closest('section') : null;
+    var workTop = work && workSection ? tops[sections.indexOf(workSection)] + offsetWithin(work, workSection) : 0;
+    m = { vh: vh, docH: root.scrollHeight, tops: tops, heroH: heights[0] || vh, workTop: workTop };
+    // ---- writes ----
+    stack.forEach(function (s, i) {
       // Tall pages stick only once their bottom reaches the screen bottom,
       // so every part of them can still be read
-      s.style.setProperty('--stick', Math.min(0, vh - s.offsetHeight) + 'px');
+      s.style.setProperty('--stick', Math.min(0, vh - heights[i]) + 'px');
     });
+    scrollFrame();
   }
-  function measureAll() { measureStack(); measureFlow(); updateNav(); }
-  measureAll();
-  window.addEventListener('load', measureAll);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureAll);
+
+  function scrollFrame() {
+    ticking = false;
+    var y = window.scrollY;
+    var vh = m.vh;
+
+    // Header turns solid once the page is scrolled
+    var scrolled = y > 8;
+    if (scrolled !== scrolledState && header) {
+      scrolledState = scrolled;
+      header.classList.toggle('is-scrolled', scrolled);
+    }
+
+    // Nav highlight: last section whose normal-flow top passed 45% of the screen
+    var line = y + vh * 0.45;
+    var hash = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (m.tops[i] <= line) hash = '#' + sections[i].id;
+    }
+    if (hash !== currentHash) {
+      currentHash = hash;
+      navLinks.forEach(function (link) {
+        var active = link.getAttribute('href') === hash;
+        link.classList.toggle('is-active', active);
+        if (active) link.setAttribute('aria-current', 'true');
+        else link.removeAttribute('aria-current');
+      });
+    }
+
+    if (reduceMotion) return;
+
+    // Page stack: how far the next page has slid over this one (0..1)
+    stack.forEach(function (s, i) {
+      var nextTop = m.tops[i + 1] - y;
+      s.style.setProperty('--cover', clamp01((vh - nextTop) / vh).toFixed(4));
+    });
+    var max = m.docH - vh;
+    root.style.setProperty('--progress', max > 0 ? clamp01(y / max).toFixed(4) : 0);
+    if (hero) hero.style.setProperty('--hero-p', clamp01(y / m.heroH).toFixed(4));
+    if (work) {
+      // 0 when the preview's top is at the bottom of the screen, 1 once it is 40% up
+      work.style.setProperty('--work-p', clamp01((vh - (m.workTop - y)) / (vh * 0.6)).toFixed(4));
+    }
+  }
+
+  var ticking = false;
+  function schedule() {
+    if (!ticking) { ticking = true; requestAnimationFrame(scrollFrame); }
+  }
+  var measureQueued = false;
+  function scheduleMeasure() {
+    if (measureQueued) return;
+    measureQueued = true;
+    requestAnimationFrame(function () { measureQueued = false; measure(); });
+  }
+
+  window.addEventListener('scroll', schedule, { passive: true });
+  window.addEventListener('resize', scheduleMeasure);
+  window.addEventListener('load', scheduleMeasure);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleMeasure);
   if ('ResizeObserver' in window) {
-    var ro = new ResizeObserver(function () { requestAnimationFrame(measureAll); });
+    var ro = new ResizeObserver(scheduleMeasure);
     sections.forEach(function (s) { ro.observe(s); });
   }
-  window.addEventListener('scroll', function () { updateNav(); }, { passive: true });
-
-  if (!reduceMotion) {
-    var ticking = false;
-    var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-    var update = function () {
-      ticking = false;
-      var vh = window.innerHeight;
-      stack.forEach(function (s, i) {
-        var next = sections[i + 1];
-        var cover = clamp01((vh - next.getBoundingClientRect().top) / vh);
-        s.style.setProperty('--cover', cover.toFixed(4));
-      });
-      var max = root.scrollHeight - vh;
-      root.style.setProperty('--progress', max > 0 ? clamp01(window.scrollY / max).toFixed(4) : 0);
-      if (hero) {
-        var hp = clamp01(window.scrollY / (hero.offsetHeight || vh));
-        hero.style.setProperty('--hero-p', hp.toFixed(4));
-      }
-      if (work) {
-        var r = work.getBoundingClientRect();
-        // 0 when the preview's top is at the bottom of the screen, 1 once it is 40% up
-        var wp = clamp01((vh - r.top) / (vh * 0.6));
-        work.style.setProperty('--work-p', wp.toFixed(4));
-      }
-    };
-    var onMove = function () {
-      if (!ticking) { ticking = true; requestAnimationFrame(update); }
-    };
-    window.addEventListener('scroll', onMove, { passive: true });
-    window.addEventListener('resize', onMove);
-    update();
-  }
+  scheduleMeasure();
 
   // Reveal on scroll
   var reveals = document.querySelectorAll('.reveal');
