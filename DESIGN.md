@@ -1,6 +1,6 @@
 # Design
 
-Online resume for Danil Abramitov. One page, **dark only**, blue + purple, adapted from the Anima "Split Studio" style (dark ground, large soft serif headlines, clean sans text, generous spacing). The staff **name badge** in the hero stays as the page's signature object.
+Online resume for Danil Abramitov. One page, **dark only**, purple, adapted from the Anima "Split Studio" style (dark ground, large soft serif headlines, clean sans text, generous spacing). The staff **name badge** in the hero stays as the page's signature object.
 
 ## Colors
 
@@ -15,11 +15,13 @@ Tokens live in `css/styles.css` `:root` as semantic names. Dark only; there is n
 | `--line` | #3d3d41 | hairlines, borders |
 | `--text` | #f7f7f7 | body text |
 | `--text-muted` | #bbbcbd | secondary text (8.6:1) |
-| `--accent` | #58a5fc | links, icons, greeting, highlights |
-| `--accent-strong` | #0771b8 | button fill, badge strap (white text 5.2:1) |
-| `--accent-hover` | #065f9c | button hover (white text 6.5:1) |
-| `--leaf` | #a898ec | purple highlight: title underline, focus ring, active nav (never body text) |
-| `--band` | #063f77 | contact band + footer |
+| `--accent` | #b4a6f7 | links, icons, greeting, highlights |
+| `--accent-strong` | #6a4fd1 | button fill, badge strap (white text 5.7:1) |
+| `--accent-hover` | #5a3fc0 | button hover |
+| `--leaf` | #d2c8fa | light lilac highlight: title underline, focus ring, active nav (never body text) |
+| `--band` | #35286f | contact band + footer (deep purple) |
+
+No blue anywhere: the whole accent family is purple (user's choice).
 
 ## Typography
 
@@ -40,7 +42,7 @@ Tokens live in `css/styles.css` `:root` as semantic names. Dark only; there is n
 
 Each part is a `.screen` (min-height 100svh, vertically centred, `scroll-snap: y proximity`).
 
-1. **Hero**: the greeting cycles "Hello" in 17 widely spoken languages, then "I'm Danil Abramitov", a short line about what he does, and one big "Contact me" button. Background art: inline SVG `.hero-art` with purple gradient shapes, copper `#f2c2a2` outlines and radiating lines, drawn in on load. The languages & tools marquee sits at the bottom.
+1. **Hero**: the greeting cycles "Hello" in 17 widely spoken languages, then "I'm Danil Abramitov", a short line about what he does, and one big "Contact me" button. Background art: inline SVG `.hero-art` with purple gradient shapes, copper `#f2c2a2` outlines and radiating lines, drawn in on load. the "Tools I use" marquee sits at the bottom.
 2. **About me**: lead text, tags and a facts list (languages, education, computer), with the swinging name badge on a lanyard to the right.
 3. **What I can make for you**: two offer panels, "A website, built with AI" and "Data entry & admin help". Each has ticks and an "Ask about…" link that pre-selects that service in the form.
 4. **My work**: this website as the project, with a code-drawn mini preview, chips and three build steps.

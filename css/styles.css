@@ -4,7 +4,7 @@
    Manrope (display) + Source Sans 3 (body).
    ========================================================== */
 
-/* ---------- Palette: dark studio, blue + purple (Anima-inspired) ---------- */
+/* ---------- Palette: dark studio, purple (Anima-inspired) ---------- */
 :root {
   --bg: #222224;            /* page ground */
   --surface: #333336;       /* cards, badge, chips */
@@ -13,16 +13,16 @@
   --line: #3d3d41;
   --text: #f7f7f7;
   --text-muted: #bbbcbd;    /* 8.6:1 on --bg */
-  --accent: #58a5fc;        /* links, icons, highlights (6.6:1 on --bg) */
-  --accent-strong: #0771b8; /* button fill, white text 5.2:1 */
-  --accent-hover: #065f9c;  /* darker on hover keeps white text at 6.5:1 */
+  --accent: #b4a6f7;        /* links, icons, highlights (purple, ~8:1 on --bg) */
+  --accent-strong: #6a4fd1; /* button fill, white text 5.7:1 */
+  --accent-hover: #5a3fc0;  /* darker on hover keeps white text above 7:1 */
   --on-accent: #ffffff;
-  --leaf: #a898ec;          /* purple highlight: underlines, focus ring */
-  --band: #063f77;          /* closing contact band + footer */
+  --leaf: #d2c8fa;          /* light lilac highlight: underlines, focus ring */
+  --band: #35286f;          /* closing contact band + footer (deep purple) */
   --band-text: #ffffff;
-  --band-muted: #bfd6ee;
+  --band-muted: #d6cdf5;
   --band-line: rgba(255, 255, 255, 0.14);
-  --selection: rgba(88, 165, 252, 0.35);
+  --selection: rgba(210, 200, 250, 0.35);
   --scroll-thumb: #3b3b3b;
   --clip-1: #55555a;
   --clip-2: #3e3e42;
@@ -1047,7 +1047,7 @@ html { scroll-snap-type: y proximity; }
 .mini-center .mini-line-l { width: 75%; }
 .mini-center .mini-line-m { width: 50%; }
 
-/* Contact: intro + form on the deep blue band */
+/* Contact: intro + form on the deep purple band */
 .contact-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
@@ -1087,22 +1087,22 @@ html { scroll-snap-type: y proximity; }
   padding: 0.7rem 0.85rem;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(10, 20, 40, 0.45);
+  background: rgba(22, 14, 48, 0.45);
   color: #ffffff;
   font: inherit;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .field textarea { resize: vertical; min-height: 8rem; }
-.field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #bfd6ee 50%), linear-gradient(135deg, #bfd6ee 50%, transparent 50%); background-position: calc(100% - 1.15rem) 1.3rem, calc(100% - 0.8rem) 1.3rem; background-size: 0.35rem 0.35rem; background-repeat: no-repeat; padding-right: 2.25rem; }
-.field select option { background: #063f77; color: #fff; }
-.field ::placeholder { color: rgba(191, 214, 238, 0.7); }
+.field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #d6cdf5 50%), linear-gradient(135deg, #d6cdf5 50%, transparent 50%); background-position: calc(100% - 1.15rem) 1.3rem, calc(100% - 0.8rem) 1.3rem; background-size: 0.35rem 0.35rem; background-repeat: no-repeat; padding-right: 2.25rem; }
+.field select option { background: #35286f; color: #fff; }
+.field ::placeholder { color: rgba(214, 205, 245, 0.7); }
 .field input:focus,
 .field textarea:focus,
 .field select:focus {
   outline: none;
-  border-color: #a898ec;
-  box-shadow: 0 0 0 3px rgba(168, 152, 236, 0.35);
+  border-color: #d2c8fa;
+  box-shadow: 0 0 0 3px rgba(210, 200, 250, 0.35);
 }
 .field.has-error input,
 .field.has-error textarea { border-color: #ffb4a8; }
@@ -1119,18 +1119,18 @@ html { scroll-snap-type: y proximity; }
   padding: 0.55rem 1rem;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.22);
-  background: rgba(10, 20, 40, 0.45);
+  background: rgba(22, 14, 48, 0.45);
   color: var(--band-text);
   font-weight: 600;
   transition: background-color 0.2s, border-color 0.2s;
 }
 .choice:hover span { border-color: rgba(255, 255, 255, 0.5); }
-.choice input:checked + span { background: #ffffff; border-color: #ffffff; color: #063f77; }
-.choice input:focus-visible + span { outline: 3px solid #a898ec; outline-offset: 2px; }
+.choice input:checked + span { background: #ffffff; border-color: #ffffff; color: #35286f; }
+.choice input:focus-visible + span { outline: 3px solid #d2c8fa; outline-offset: 2px; }
 
 .form-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
-.form-foot .btn-big { margin-top: 0.25rem; background: #ffffff; color: #063f77; box-shadow: none; }
-.form-foot .btn-big:hover { background: #e6eefa; }
+.form-foot .btn-big { margin-top: 0.25rem; background: #ffffff; color: #35286f; box-shadow: none; }
+.form-foot .btn-big:hover { background: #ece8fb; }
 .form-status { color: var(--band-muted); font-size: 0.95rem; }
 .form-status.is-ok { color: #ffffff; }
 
