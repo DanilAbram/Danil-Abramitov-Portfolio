@@ -31,7 +31,7 @@ Shared as a link alongside job applications; the downloadable PDF CV remains the
 - Five full-screen parts: Hello (contact button), About me, What I can make for you (Websites with AI; Data entry & admin), My work, Request form.
 - The request form sends through FormSubmit (free, no account) straight to Danil's Gmail. It needs a one-time activation click in the first email FormSubmit sends. A mailto backup appears only if sending fails.
 - Contact: email only; Danil's phone number is never shown. Visitors may leave their own phone number in the form (optional).
-- No photo provided yet.
+- Photo: `assets/danil.webp` (provided by Danil), shown round on the name badge.
 
 ## Brand Commitments
 
