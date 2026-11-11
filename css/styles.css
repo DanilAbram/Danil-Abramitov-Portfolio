@@ -984,8 +984,6 @@ html { scroll-snap-type: y proximity; }
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .field textarea { resize: vertical; min-height: 8rem; }
-.field select { appearance: none; background-image: linear-gradient(45deg, transparent 50%, #d6cdf5 50%), linear-gradient(135deg, #d6cdf5 50%, transparent 50%); background-position: calc(100% - 1.15rem) 1.3rem, calc(100% - 0.8rem) 1.3rem; background-size: 0.35rem 0.35rem; background-repeat: no-repeat; padding-right: 2.25rem; }
-.field select option { background: #35286f; color: #fff; }
 .field ::placeholder { color: rgba(214, 205, 245, 0.7); }
 .field input:focus,
 .field textarea:focus,
@@ -1108,6 +1106,34 @@ html.js .is-visible .section-title::after { transform: scaleX(1); }
 /* Badge swings only once you reach it */
 html.js .badge { animation-play-state: paused; }
 html.js .badge-stage.is-visible .badge { animation-play-state: running; }
+
+/* Page stack: each full-screen page sticks once fully read, then the
+   next page slides up over it like a card while it shrinks and dims.
+   JS adds .stack and sets --stick (sticky offset) and --cover (0..1). */
+.hero, .about, .projects { background-color: var(--bg); }
+.stack {
+  position: sticky;
+  top: var(--stick, 0px);
+  transform-origin: 50% 30%;
+  transform: scale(calc(1 - var(--cover, 0) * 0.07));
+}
+.stack::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  background: #0d0c14;
+  opacity: calc(var(--cover, 0) * 0.6);
+  pointer-events: none;
+}
+.stack-on .screen:not(.hero) {
+  border-radius: 28px 28px 0 0;
+  box-shadow: 0 -30px 60px -24px rgba(0, 0, 0, 0.7);
+}
+.stack-on .contact,
+.stack-on .site-footer { position: relative; }
+html.stack-on { scroll-snap-type: none; }
+html.measuring .stack { position: relative; transform: none; }
 
 /* Site preview straightens as it scrolls into view */
 .mini-browser { transform: rotate(calc(-1.5deg - (1 - var(--work-p, 1)) * 5deg)) translateY(calc((1 - var(--work-p, 1)) * 30px)); }

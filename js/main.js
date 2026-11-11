@@ -50,22 +50,31 @@
     else if (desktop.addListener) desktop.addListener(onChange);
   }
 
-  // Active nav link based on the section in view
-  var sections = document.querySelectorAll('main section[id]');
-  if ('IntersectionObserver' in window && sections.length && navLinks.length) {
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        var hash = '#' + entry.target.id;
-        navLinks.forEach(function (link) {
-          var active = link.getAttribute('href') === hash;
-          link.classList.toggle('is-active', active);
-          if (active) link.setAttribute('aria-current', 'true');
-          else link.removeAttribute('aria-current');
-        });
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    sections.forEach(function (s) { spy.observe(s); });
+  // Sections in page order. Their normal-flow tops are measured (with
+  // sticky turned off) so the nav highlight stays right while pages stack.
+  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
+  var flowTops = [];
+  var currentHash = null;
+  function measureFlow() {
+    document.documentElement.classList.add('measuring');
+    flowTops = sections.map(function (s) { return s.getBoundingClientRect().top + window.scrollY; });
+    document.documentElement.classList.remove('measuring');
+  }
+  function updateNav() {
+    if (!navLinks.length || !flowTops.length) return;
+    var line = window.scrollY + window.innerHeight * 0.45;
+    var hash = null;
+    for (var i = 0; i < sections.length; i++) {
+      if (flowTops[i] <= line) hash = '#' + sections[i].id;
+    }
+    if (hash === currentHash) return;
+    currentHash = hash;
+    navLinks.forEach(function (link) {
+      var active = link.getAttribute('href') === hash;
+      link.classList.toggle('is-active', active);
+      if (active) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
+    });
   }
 
   // Lists that appear one item after another once their block is revealed
@@ -81,12 +90,39 @@
   var root = document.documentElement;
   var hero = document.querySelector('.hero');
   var work = document.querySelector('.mini-browser');
+  // Page stack: every screen except the last sticks and is covered by the next
+  var stack = reduceMotion ? [] : sections.slice(0, -1);
+  stack.forEach(function (s) { s.classList.add('stack'); });
+  if (stack.length) root.classList.add('stack-on');
+  function measureStack() {
+    var vh = window.innerHeight;
+    stack.forEach(function (s) {
+      // Tall pages stick only once their bottom reaches the screen bottom,
+      // so every part of them can still be read
+      s.style.setProperty('--stick', Math.min(0, vh - s.offsetHeight) + 'px');
+    });
+  }
+  function measureAll() { measureStack(); measureFlow(); updateNav(); }
+  measureAll();
+  window.addEventListener('load', measureAll);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureAll);
+  if ('ResizeObserver' in window) {
+    var ro = new ResizeObserver(function () { requestAnimationFrame(measureAll); });
+    sections.forEach(function (s) { ro.observe(s); });
+  }
+  window.addEventListener('scroll', function () { updateNav(); }, { passive: true });
+
   if (!reduceMotion) {
     var ticking = false;
     var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
     var update = function () {
       ticking = false;
       var vh = window.innerHeight;
+      stack.forEach(function (s, i) {
+        var next = sections[i + 1];
+        var cover = clamp01((vh - next.getBoundingClientRect().top) / vh);
+        s.style.setProperty('--cover', cover.toFixed(4));
+      });
       var max = root.scrollHeight - vh;
       root.style.setProperty('--progress', max > 0 ? clamp01(window.scrollY / max).toFixed(4) : 0);
       if (hero) {
@@ -258,7 +294,6 @@
       var phone = form.elements.phone.value.trim();
       var company = form.elements.company.value.trim();
       var details = form.elements.details.value.trim();
-      var language = form.elements.language.value;
       var serviceEl = form.querySelector('input[name="service"]:checked');
       var service = serviceEl ? serviceEl.value : '';
 
@@ -285,7 +320,6 @@
         phone ? 'Phone: ' + phone : null,
         company ? 'Business: ' + company : null,
         'Service: ' + service,
-        'Preferred language: ' + language,
         '',
         'What I need:',
         details
