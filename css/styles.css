@@ -710,52 +710,6 @@ input, textarea { caret-color: var(--leaf); }
   background: var(--tint);
 }
 
-/* Miniature of this website, drawn in code */
-.mini-browser {
-  overflow: hidden;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  background: var(--bg);
-  box-shadow: var(--shadow-badge);
-  transform: rotate(-1.5deg);
-  transition: transform 0.5s var(--ease-out);
-}
-.project:hover .mini-browser { transform: rotate(0deg) translateY(-4px); }
-.mini-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.6rem 0.8rem;
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
-}
-.mini-dot { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--tint-2); }
-.mini-url {
-  margin-left: 0.6rem;
-  padding: 0.15rem 0.7rem;
-  border-radius: 6px;
-  background: var(--tint);
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-.mini-page { padding: 0.9rem 1rem 1.2rem; }
-.mini-nav { display: flex; justify-content: space-between; align-items: center; }
-.mini-logo { width: 1.1rem; height: 1.1rem; border-radius: 4px; background: var(--accent-strong); }
-.mini-links { width: 45%; height: 0.4rem; border-radius: 6px; background: var(--tint-2); }
-.mini-line { display: block; height: 0.55rem; border-radius: 6px; background: var(--text); opacity: 0.85; }
-.mini-line-xl { width: 70%; height: 0.8rem; background: var(--accent); opacity: 1; }
-.mini-line-l { width: 92%; height: 0.8rem; }
-.mini-line-m { width: 60%; background: var(--text-muted); opacity: 0.5; }
-.mini-btn { width: 38%; height: 1rem; margin-top: 0.35rem; border-radius: 6px; background: var(--accent-strong); }
-.mini-rows {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin-top: 1.2rem;
-}
-.mini-rows span { height: 1.4rem; border-radius: 6px; background: var(--tint); }
-
 .project-title {
   font-family: var(--font-serif);
   font-size: clamp(1.6rem, 2.8vw, 2.1rem);
@@ -1011,11 +965,6 @@ html { scroll-snap-type: y proximity; }
 .offer-link:hover .icon { transform: translateX(3px); }
 .offer-link .icon { transition: transform 0.2s var(--ease-out); }
 
-/* My work: centered mini page */
-.mini-center { display: grid; justify-items: center; gap: 0.45rem; margin-top: 1.4rem; }
-.mini-center .mini-line-xl { width: 55%; }
-.mini-center .mini-line-l { width: 75%; }
-.mini-center .mini-line-m { width: 50%; }
 
 /* Contact: intro + form on the deep purple band */
 .contact-grid {
@@ -1272,7 +1221,6 @@ html.stack-on { scroll-snap-type: none; }
 html.measuring .stack { position: relative; top: auto; transform: none; }
 
 /* Site preview straightens as it scrolls into view */
-.mini-browser { transform: rotate(calc(-1.5deg - (1 - var(--work-p, 1)) * 5deg)) translateY(calc((1 - var(--work-p, 1)) * 30px)); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 899px) {
@@ -1320,7 +1268,7 @@ html.measuring .stack { position: relative; top: auto; transform: none; }
   }
   html.js .reveal,
   html.js .stagger > * { opacity: 1; transform: none; filter: none; }
-  .hero-copy, .hero .tools, .hero-art, .mini-browser { transform: none !important; opacity: 1 !important; }
+  .hero-copy, .hero .tools, .hero-art { transform: none !important; opacity: 1 !important; }
   html.js .section-title::after { transform: none; }
   .scroll-progress { display: none; }
 }

@@ -60,7 +60,6 @@
   var root = document.documentElement;
   var main = document.querySelector('main');
   var hero = document.querySelector('.hero');
-  var work = document.querySelector('.mini-browser');
   var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
   // Page stack: every screen except the last sticks and is covered by the next
   var stack = reduceMotion ? [] : sections.slice(0, -1);
@@ -68,16 +67,9 @@
   if (stack.length) root.classList.add('stack-on');
 
   var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-  var m = { vh: window.innerHeight, docH: 0, tops: [], heroH: 0, workTop: 0 };
+  var m = { vh: window.innerHeight, docH: 0, tops: [], heroH: 0 };
   var currentHash;
   var scrolledState;
-
-  // Offset of an element from the top of its section, ignoring sticky/transforms
-  function offsetWithin(el, section) {
-    var y = 0;
-    while (el && el !== section) { y += el.offsetTop; el = el.offsetParent; }
-    return y;
-  }
 
   function measure() {
     // ---- reads ----
@@ -86,9 +78,7 @@
     var start = main.offsetTop + (parseFloat(getComputedStyle(sections[0]).marginTop) || 0);
     var tops = [];
     heights.reduce(function (y, h, i) { tops[i] = y; return y + h; }, start);
-    var workSection = work ? work.closest('section') : null;
-    var workTop = work && workSection ? tops[sections.indexOf(workSection)] + offsetWithin(work, workSection) : 0;
-    m = { vh: vh, docH: root.scrollHeight, tops: tops, heroH: heights[0] || vh, workTop: workTop };
+    m = { vh: vh, docH: root.scrollHeight, tops: tops, heroH: heights[0] || vh };
     // ---- writes ----
     stack.forEach(function (s, i) {
       // Tall pages stick only once their bottom reaches the screen bottom,
@@ -136,10 +126,6 @@
     var max = m.docH - vh;
     root.style.setProperty('--progress', max > 0 ? clamp01(y / max).toFixed(4) : 0);
     if (hero) hero.style.setProperty('--hero-p', clamp01(y / m.heroH).toFixed(4));
-    if (work) {
-      // 0 when the preview's top is at the bottom of the screen, 1 once it is 40% up
-      work.style.setProperty('--work-p', clamp01((vh - (m.workTop - y)) / (vh * 0.6)).toFixed(4));
-    }
   }
 
   var ticking = false;

@@ -35,7 +35,7 @@ No blue anywhere: the whole accent family is purple (user's choice).
 - Chips & tags: 6px radius.
 - Cards/frames (badge, preview frame): 12px radius. Icon tiles: 8px.
 - Copy button next to the email (for visitors without a mail app). Footer: email, LinkedIn and GitHub icon links + back to top.
-- Websites & AI: code-drawn miniature of this site + three steps.
+- Websites & AI: project screenshots (Sage, Bunker 7) + three steps.
 - Icons: **coolicons v5.3** (line / round, MIT, credit in `CREDITS.md`), drawn once in an inline SVG sprite (`<symbol id="i-…">`, reused with `<use>`). 24px grid, 2px stroke, round caps, `currentColor`. Ids: i-chat, i-check, i-tick, i-list, i-monitor, i-table, i-sparkle, i-phone-check, i-mail, i-linkedin, i-github, i-arrow-up/down/right, i-send, i-menu, i-close, i-copy, i-translate, i-book, i-external. The mobile menu button swaps menu/close; Copy swaps copy/tick; external links get a small i-external mark.
 
 ## Page structure (five full screens)
@@ -45,7 +45,7 @@ Each part is a `.screen` (min-height 100svh, vertically centred). **Page stack:*
 1. **Hero**: the greeting cycles "Hello" in 17 widely spoken languages, then "I'm Danil Abramitov", a short line about what he does, then "Contact me" (primary) and "See what I can make" (ghost, scrolls to services). Background art: inline SVG `.hero-art` with purple gradient shapes, copper `#f2c2a2` outlines and radiating lines, drawn in on load. The "Tools I use" marquee sits at the bottom.
 2. **About me**: lead text, tags and a facts list (languages, education, computer), with the swinging name badge on a lanyard to the right (round photo `assets/danil-avatar.webp`, a 256px face crop of `assets/danil-source.jpg`, with a purple ring, name, EN/UA/RU, and an "Ask me anything" link at the bottom that jumps to the contact form).
 3. **What I can make for you**: two offer panels, "A website, built with AI" and "Data entry & admin help". Each has ticks and an "Ask about…" link that pre-selects that service in the form.
-4. **My work**: three projects in alternating rows: this website (code-drawn mini preview, "See the code on GitHub"), Sage (AI career finder web app, screenshot `assets/work-sage.jpg`, "Open Sage" + "Code") and Bunker 7 (team game-jam game, screenshot `assets/work-bunker7.jpg`, "Play it" on itch.io + "Code"); then three build steps. Screenshots are tilted 1.5deg and straighten on hover.
+4. **My work**: two projects in alternating rows: Sage (AI career finder web app, screenshot `assets/work-sage.jpg`, "Open Sage" + "Code") and Bunker 7 (team game-jam game, screenshot `assets/work-bunker7.jpg`, "Play it" on itch.io + "Code"); then three build steps. Screenshots are tilted 1.5deg and straighten on hover.
 5. **Contact** (deep purple band): title "Tell Me What Your Company Needs", intro, email, LinkedIn and GitHub links, and the **request form**. The form asks for name, email, an optional phone and business, the service (radio pills) and details. "Send request" checks the fields, then posts JSON to FormSubmit (`formsubmit.co/ajax/<email>`), which emails the request to Danil. States: spinner + "Sending…" (button disabled); a thank-you panel replacing the form (with "Send another request"); an error box with an "email it to me instead" mailto backup. A hidden honeypot field (`_honey`) stops bots.
 
 The header is transparent over the hero and turns solid `--bg` once scrolled. It has a white pill "Contact me" CTA on desktop.
@@ -56,7 +56,7 @@ The header is transparent over the hero and turns solid `--bg` once scrolled. It
 - Hero art draws in once; tools strip scrolls continuously.
 - Badge swings in on load, tilts toward the pointer on fine pointers.
 - Scroll: a 3px purple progress line under the header; the hero copy drifts up and fades while the background art moves slower (depth); sections rise in from a soft blur; lists inside them (tags, facts, ticks, chips, contact links, form fields) arrive one by one (70ms apart); section underlines draw in; the badge swings only when its section is reached; the site preview straightens as it scrolls into view.
-- Scroll values are written as CSS variables once per animation frame (--progress, --hero-p, --work-p). All motion is off under prefers-reduced-motion.
+- Scroll values are written as CSS variables once per animation frame (--progress, --hero-p, --cover). All motion is off under prefers-reduced-motion.
 
 ## Layout
 
