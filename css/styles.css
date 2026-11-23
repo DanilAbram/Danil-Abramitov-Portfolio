@@ -766,6 +766,27 @@ input, textarea { caret-color: var(--leaf); }
 .project-body .chips { margin-top: 1.5rem; }
 .project-link { margin-top: 1.75rem; color: var(--text); }
 .project-link .icon { color: var(--accent); }
+.btn-primary.project-link, .btn-primary.project-link .icon { color: var(--on-accent); }
+
+/* More projects: real screenshots, alternating sides */
+.project + .project { margin-top: clamp(3.5rem, 8vw, 6rem); }
+.project-flip { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); }
+.project-flip .project-preview { order: 2; }
+.project-shot { display: block; }
+.project-shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-badge);
+  transform: rotate(-1.5deg);
+  transition: transform 0.5s var(--ease-out);
+}
+.project-flip .project-shot img { transform: rotate(1.5deg); }
+.project:hover .project-shot img { transform: rotate(0deg) translateY(-4px); }
+.project-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.75rem; }
+.project-links .project-link { margin-top: 0; }
 
 .steps {
   display: grid;
@@ -1265,7 +1286,8 @@ html.measuring .stack { position: relative; top: auto; transform: none; }
   .contact-grid { grid-template-columns: 1fr; }
   .header-cta { display: none; }
   .about-grid { grid-template-columns: 1fr; }
-  .project { grid-template-columns: 1fr; }
+  .project, .project-flip { grid-template-columns: 1fr; }
+  .project-flip .project-preview { order: 0; }
   .steps { grid-template-columns: 1fr; }
   .step { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.25rem; }
   .step-icon { grid-row: span 2; }
