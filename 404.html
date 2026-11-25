@@ -13,15 +13,30 @@
     .lost { min-height: 100svh; display: grid; place-items: center; text-align: center; padding: 2rem var(--gutter); }
     .lost h1 { font-size: clamp(2.4rem, 6vw, 4rem); letter-spacing: -0.02em; }
     .lost p { margin-top: 1rem; color: var(--text-muted); max-width: 40ch; margin-inline: auto; }
-    .lost .btn { margin-top: 2rem; }
+    .lost svg { display: block; width: min(20rem, 70vw); height: auto; margin: 0 auto 2rem; }
+    .lost-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 2rem; }
   </style>
 </head>
 <body>
   <main class="lost">
     <div>
-      <h1>This page doesn't exist</h1>
-      <p>The link may be old or mistyped. Everything about me is on the main page.</p>
-      <a class="btn btn-primary" href="/">Go to the main page</a>
+      <svg viewBox="0 0 400 220" fill="none" aria-hidden="true" focusable="false">
+        <defs><linearGradient id="l" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#0b7fa9"/><stop offset="1" stop-color="#096b90" stop-opacity="0.15"/></linearGradient></defs>
+        <circle cx="306" cy="66" r="46" fill="url(#l)"/>
+        <g stroke="#a1ccdc" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 186H380"/>
+          <path d="M34 92C52 130 62 160 70 182C84 120 120 84 150 106C172 122 182 152 190 182C200 148 222 128 242 142C254 150 262 166 268 182" stroke-dasharray="4 9"/>
+          <path d="M288 182C288 152 344 152 344 182"/>
+          <path d="M316 160V128M306 138L316 128L326 138"/>
+        </g>
+        <circle cx="34" cy="80" r="11" fill="#f3f9fb"/>
+      </svg>
+      <h1>Page not found</h1>
+      <p>The link may be outdated or mistyped. You can return to the main page or see my work.</p>
+      <div class="lost-actions">
+        <a class="btn btn-primary" href="/">Back to the main page</a>
+        <a class="btn btn-ghost" href="/#work">See my work</a>
+      </div>
     </div>
   </main>
 </body>

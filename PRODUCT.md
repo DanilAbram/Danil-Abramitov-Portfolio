@@ -28,7 +28,7 @@ Shared as a link alongside job applications; the downloadable PDF CV remains the
 
 ## Capabilities and Constraints
 
-- Five full-screen parts: Hello (contact button), About me, My work, What I can make for you (Websites, Mobile apps, AI tools), Get in touch (form). Hero and About me wording is Danil's own.
+- Seven full-screen parts: Hello (contact button), About me, My work, What I can build for you (Websites, Mobile apps, AI tools), My process, Questions, Get in touch (form). The Contact intro is Danil's own wording; the other texts were edited on 2026-11-25 at Danil's request for a more professional tone, without adding facts.
 - The request form sends through FormSubmit (free, no account) straight to Danil's Gmail. It needs a one-time activation click in the first email FormSubmit sends. A mailto backup appears only if sending fails.
 - Contact: email only; Danil's phone number is never shown. In the form, visitors leave their own email or phone number (one is enough).
 - Photo: `assets/danil-source.jpg` (provided by Danil); the badge shows the 256px crop `assets/danil-avatar.webp` in a circle.

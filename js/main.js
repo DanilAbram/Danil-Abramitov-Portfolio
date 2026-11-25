@@ -103,7 +103,10 @@
   var processAt = sections.indexOf(processBox);
   var processScroll = processBox && processBox.querySelector('.process-scroll');
   var pinned = false;
-  var pinRoom = window.matchMedia('(min-width: 900px) and (min-height: 640px)');
+  var processPin = processBox && processBox.querySelector('.process-pin');
+  var pinWidth = 0;
+  var touch = window.matchMedia('(pointer: coarse)').matches;
+  var pinRoom = window.matchMedia('(min-width: 900px) and (min-height: 640px), (max-width: 899px) and (min-height: 540px)');
   function setPin() {
     pinned = !!processBox && !reduceMotion && pinRoom.matches;
     root.classList.toggle('pin-on', pinned);
@@ -113,13 +116,52 @@
     else processScroll.setAttribute('tabindex', '0');
   }
   setPin();
-  if (pinRoom.addEventListener) {
-    pinRoom.addEventListener('change', function () {
-      setPin();
-      if (pinned && processScroll) processScroll.scrollLeft = 0; // start from the first column
-    });
-  }
+  window.addEventListener('resize', function () {
+    // On touch screens the address bar and the keyboard change the height all
+    // the time: a turned screen counts, and so does more room while My process
+    // is still further down. Anything else would make the page jump.
+    var w = window.innerWidth;
+    var same = w === pinWidth;
+    pinWidth = w;
+    if (pinRoom.matches === pinned) return;
+    if (touch && same && (pinned || window.scrollY + window.innerHeight > m.tops[processAt])) return;
+    setPin();
+    if (pinned && processScroll) processScroll.scrollLeft = 0; // start from the first column
+  });
   if (processScroll) {
+    // A sideways swipe on a phone moves the columns too
+    var swipe = null;
+    processScroll.addEventListener('touchstart', function (e) {
+      var t = e.touches[0];
+      swipe = pinned && e.touches.length === 1 ? { x: t.clientX, y: t.clientY, top: window.scrollY, speed: 0, at: e.timeStamp, side: null } : null;
+    }, { passive: true });
+    processScroll.addEventListener('touchmove', function (e) {
+      if (!swipe) return;
+      var t = e.touches[0];
+      var dx = swipe.x - t.clientX;
+      var dy = swipe.y - t.clientY;
+      if (swipe.side === null) {
+        if (Math.abs(dx) < 8 && Math.abs(dy) < 8) return;
+        swipe.side = Math.abs(dx) > Math.abs(dy);
+        swipe.last = dx;
+      }
+      if (!swipe.side) return; // up or down: a normal scroll
+      swipe.speed = (dx - swipe.last) / Math.max(1, e.timeStamp - swipe.at);
+      swipe.last = dx;
+      swipe.at = e.timeStamp;
+      var first = m.tops[processAt];
+      var end = first + m.heights[processAt] - m.vh;
+      window.scrollTo({ top: Math.min(end, Math.max(first, swipe.top + dx)), behavior: 'instant' });
+    }, { passive: true });
+    processScroll.addEventListener('touchend', function () {
+      if (swipe && swipe.side && Math.abs(swipe.speed) > 0.2) {
+        var first = m.tops[processAt];
+        var end = first + m.heights[processAt] - m.vh;
+        window.scrollTo({ top: Math.min(end, Math.max(first, window.scrollY + swipe.speed * 260)), behavior: 'smooth' });
+      }
+      swipe = null;
+    });
+
     // The button at the end can be reached with Tab while it is off screen
     processScroll.addEventListener('focusin', function (e) {
       if (!pinned || e.target === processScroll || !m.vh || !e.target.matches(':focus-visible')) return;
@@ -134,11 +176,13 @@
     var y = window.scrollY;
     var vh = window.innerHeight;
     var heights = sections.map(function (s) { return s.offsetHeight; });
+    var pinH = processPin ? processPin.offsetHeight : 0;
+    if (!pinWidth) pinWidth = window.innerWidth;
     // The hero's negative margin is already part of main.offsetTop
     var start = main.offsetTop;
     var tops = [];
     heights.reduce(function (y, h, i) { tops[i] = y; return y + h; }, start);
-    m = { vh: vh, docH: root.scrollHeight, tops: tops, heights: heights, heroH: heights[0] || vh };
+    m = { vh: vh, docH: root.scrollHeight, tops: tops, heights: heights, pinH: pinH, heroH: heights[0] || vh };
     // ---- writes ----
     stack.forEach(function (s, i) {
       // Tall pages stick only once their bottom reaches the screen bottom,
@@ -191,7 +235,8 @@
     if (hero) hero.style.setProperty('--hero-p', clamp01(y / m.heroH).toFixed(4));
     // My process: the columns slide sideways while the page holds still
     if (pinned && processAt > -1) {
-      var run = m.heights[processAt] - vh;
+      // pinH does not change when a phone hides its address bar, so nothing jumps
+      var run = m.heights[processAt] - m.pinH;
       processBox.style.setProperty('--process-p', run > 0 ? clamp01((y - m.tops[processAt]) / run).toFixed(5) : 0);
     }
   }
@@ -245,6 +290,18 @@
     target.focus({ preventScroll: true });
     target.addEventListener('blur', function () { target.removeAttribute('tabindex'); }, { once: true });
   });
+
+  // Opened with a link to a section (danilabramitov.vercel.app/#work): go
+  // straight there. A reload keeps the place the visitor was at.
+  var startAt = sections.findIndex(function (s) { return '#' + s.id === location.hash; });
+  var visit = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+  if (startAt > 0 && (!visit || visit.type === 'navigate')) {
+    window.addEventListener('load', function () {
+      measure();
+      var gap = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+      window.scrollTo({ top: Math.max(0, m.tops[startAt] - gap), behavior: 'instant' });
+    });
+  }
 
   // Reveal on scroll
   var reveals = document.querySelectorAll('.reveal');
@@ -538,6 +595,12 @@
         });
       });
     });
+    // Left and right arrow keys: previous and next project
+    caseBox.addEventListener('keydown', function (e) {
+      if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey || e.target.closest('.case-thumbs')) return;
+      var by = e.key === 'ArrowLeft' ? -1 : e.key === 'ArrowRight' ? 1 : 0;
+      if (by) caseBox.querySelector('[data-case-step="' + by + '"]').click();
+    });
     pages.forEach(function (page) {
       var big = page.querySelector('.case-hero');
       var thumbs = Array.prototype.slice.call(page.querySelectorAll('.case-thumbs button'));
@@ -667,8 +730,8 @@
     var sendLabel = form.querySelector('.send-label');
     var sending = false;
     var HINTS = {
-      Project: 'Your idea, who it is for, and any deadline.',
-      Question: 'What would you like to ask or tell me?'
+      Project: 'What you need, who it is for, and any deadline',
+      Question: 'Your question or message'
     };
 
     var chosen = function (name) {
@@ -751,15 +814,15 @@
         if (!ok && !firstBad) firstBad = el;
       };
       check(!!topic, 'f-topic-error', form.querySelector('input[name="topic"]'), 'Please choose one.');
-      check(topic !== 'Project' || !!kind, 'f-kind-error', form.querySelector('input[name="kind"]'), 'Please choose one. “Not sure yet” is fine too.');
+      check(topic !== 'Project' || !!kind, 'f-kind-error', form.querySelector('input[name="kind"]'), 'Please choose one, or “Not sure yet”.');
       check(name.length > 0, 'f-name-error', form.elements.name, 'Please enter your name.');
       // One way to reply is enough, but what is filled in has to be complete
       var none = !email && !phone;
       check(!none && (!email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)), 'f-email-error', form.elements.email,
-        none ? 'Please leave an email or a phone number so I can reply.' : 'That email looks incomplete. Please check it.');
+        none ? 'Please provide an email address or a phone number.' : 'That email looks incomplete. Please check it.');
       check(!phone || phone.replace(/\D/g, '').length >= 7, 'f-phone-error', form.elements.phone,
         'That number looks too short. Please check it.');
-      check(details.length > 0, 'f-details-error', form.elements.details, 'Please write a few words so I know how to help.');
+      check(details.length > 0, 'f-details-error', form.elements.details, 'Please write a short message.');
 
       if (firstBad) {
         showStatus('Please fix the highlighted fields.', 'error');
