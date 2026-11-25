@@ -44,7 +44,7 @@
   }
 
   // Lists that appear one item after another once their block is revealed
-  document.querySelectorAll('.tags, .facts, .contact-alt').forEach(function (list) {
+  document.querySelectorAll('.tags, .facts, .stats, .contact-alt').forEach(function (list) {
     list.classList.add('stagger');
     Array.prototype.forEach.call(list.children, function (child, i) {
       child.style.setProperty('--i', i);

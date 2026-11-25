@@ -73,6 +73,9 @@
       <symbol id="i-copy" viewBox="0 0 24 24"><path d="M3 11C3 8.79086 4.79086 7 7 7H13C15.20914 7 17 8.79086 17 11V17C17 19.20914 15.20914 21 13 21H7C4.79086 21 3 19.20914 3 17ZM7 3H17C19.20914 3 21 4.79086 21 7V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-translate" viewBox="0 0 24 24"><path d="M7 3V5M3 5H11M9 5C9 10 7 13 3 14M4 9C5 12 7.5 13.5 11 14M13 21L17 11L21 21M15 16H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-book" viewBox="0 0 24 24"><path d="M7 17H17C18.10457 17 19 16.10457 19 15V7C19 4.79086 17.20914 3 15 3H9C6.79086 3 5 4.79086 5 7V19M7 17C5.89543 17 5 17.89543 5 19C5 20.10457 5.89543 21 7 21M7 21H13C15.20914 21 17 19.20914 17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 8L4 12L8 16M16 8L20 12L16 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-file" viewBox="0 0 24 24"><path d="M5 6C5 4.34315 6.34315 3 8 3H13L19 9V18C19 19.65685 17.65685 21 16 21H8C6.34315 21 5 19.65685 5 18ZM13 3V9H19M9 13H15M9 17H13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-game" viewBox="0 0 24 24"><path d="M8 7H16C18.76142 7 21 9.23858 21 12C21 14.76142 18.76142 17 16 17H8C5.23858 17 3 14.76142 3 12C3 9.23858 5.23858 7 8 7ZM8 10.5V13.5M6.5 12H9.5M15 13.5H15.01M17.5 10.5H17.51" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-external" viewBox="0 0 24 24"><path d="M10 5H9C6.79086 5 5 6.79086 5 9V15C5 17.20914 6.79086 19 9 19H15C17.20914 19 19 17.20914 19 15V14M15 4H20V9M20 4L13 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
     </defs>
   </svg>
@@ -161,7 +164,7 @@
           <span class="visually-hidden">Hello, </span>
           I'm Danil&nbsp;Abramitov
         </h1>
-        <p class="hero-role">I'm a recent high school graduate who builds websites, mobile apps, and AI tools for individuals and businesses.</p>
+        <p class="hero-role">I'm a recent high school graduate who builds websites, mobile apps, and AI tools <strong>for individuals and businesses.</strong></p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-big" href="#contact">
             <svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>
@@ -209,25 +212,6 @@
               <li>Quick learner</li>
             </ul>
           </div>
-
-          <dl class="facts reveal" data-delay="140">
-            <div>
-              <dt><svg class="icon" aria-hidden="true"><use href="#i-translate"/></svg>Languages</dt>
-              <dd><span lang="uk">Ukrainian</span> (native) · Russian · English</dd>
-            </div>
-            <div>
-              <dt><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Education</dt>
-              <dd>High School Diploma, Bell High School, 2026</dd>
-            </div>
-            <div>
-              <dt><svg class="icon" aria-hidden="true"><use href="#i-monitor"/></svg>Computer</dt>
-              <dd>Word, Excel, Outlook, PDFs, online systems, websites with AI</dd>
-            </div>
-            <div>
-              <dt><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>Open to</dt>
-              <dd>Website, mobile app and AI tool projects for individuals and businesses</dd>
-            </div>
-          </dl>
         </div>
 
         <!-- Name badge -->
@@ -250,6 +234,59 @@
               Ask me anything
               <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
             </a>
+          </div>
+        </div>
+      </div>
+      <div class="container about-more">
+        <!-- Update the project number when one is added to My work -->
+        <dl class="stats reveal" aria-label="In numbers">
+          <div><dt>languages I speak</dt><dd>3</dd></div>
+          <div><dt>projects you can try</dt><dd>2</dd></div>
+          <div><dt>high school graduate</dt><dd>2026</dd></div>
+        </dl>
+
+        <div class="about-lists">
+          <div class="about-list reveal">
+            <h3 id="glance-title">At a glance</h3>
+            <dl class="facts" aria-labelledby="glance-title">
+              <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="#i-translate"/></svg>Languages</dt>
+                <dd><span lang="uk">Ukrainian</span> (native), Russian, English</dd>
+              </div>
+              <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg>Education</dt>
+                <dd>High School Diploma, Bell High School</dd>
+              </div>
+              <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="#i-file"/></svg>Office</dt>
+                <dd>Word, Excel, Outlook, PDFs, online systems</dd>
+              </div>
+              <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="#i-chat"/></svg>Open to</dt>
+                <dd>Website, mobile app and AI tool projects for individuals and businesses</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="about-list reveal" data-delay="100">
+            <h3 id="toolkit-title">My toolkit</h3>
+            <dl class="facts" aria-labelledby="toolkit-title">
+              <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="#i-monitor"/></svg>Websites</dt>
+                <dd>HTML, CSS, JavaScript</dd>
+              </div>
+              <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg>Web apps</dt>
+                <dd>Next.js, React, TypeScript, Tailwind CSS</dd>
+              </div>
+              <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="#i-sparkle"/></svg>With AI</dt>
+                <dd>AI coding assistants, Gemini</dd>
+              </div>
+              <div>
+                <dt><svg class="icon" aria-hidden="true"><use href="#i-game"/></svg>Games</dt>
+                <dd>Godot and GDScript, in a team of four</dd>
+              </div>
+            </dl>
           </div>
         </div>
       </div>
