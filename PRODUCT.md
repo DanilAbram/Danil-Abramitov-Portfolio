@@ -44,7 +44,7 @@ Shared as a link alongside job applications; the downloadable PDF CV remains the
 
 - `assets/Danil-Abramitov-Resume.pdf` — source of all facts.
 - Work: Independent Grocer, Grocery Clerk (May 2026–present, part-time); FreshCo, Grocery Clerk (Jun 2023–Oct 2024, part-time).
-- Numbers given by Danil on 2026-11-25: 2 years design, 1 year coding, 12 projects built (two are shown in My work).
+- Numbers given by Danil on 2026-11-25: 2 years design, 1 year coding, 12 projects built (three are shown in My work).
 - No testimonials, references, other metrics or certificates exist — do not invent any.
 
 ## Product Principles
