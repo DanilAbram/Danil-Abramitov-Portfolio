@@ -464,6 +464,30 @@ html.liquid .site-header::before {
 .hero-actions .btn-ghost .icon { color: var(--accent); transition: transform 0.25s var(--ease-out); }
 .hero-actions .btn-ghost:hover .icon { transform: translateY(2px); }
 
+.hero-socials {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.hero-socials a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s, background-color 0.2s;
+}
+.hero-socials .icon { color: var(--accent); transition: color 0.2s; }
+.hero-socials a:hover { color: var(--text); background: rgba(255, 255, 255, 0.08); }
+.hero-socials a:hover .icon { color: var(--leaf); }
+
 /* ---------- Name badge (signature object) ---------- */
 .badge-stage {
   position: relative;
@@ -1472,7 +1496,7 @@ html.measuring .stack { position: relative; top: auto; transform: none; }
 
 /* ---------- Print ---------- */
 @media print {
-  .site-header, .skip-link, .badge-stage, .hero-actions, .hero-art, .tools, .copy-btn, .request-form, .site-footer, .project-pic, .work-tools, .project-actions { display: none !important; }
+  .site-header, .skip-link, .badge-stage, .hero-actions, .hero-socials, .hero-art, .tools, .copy-btn, .request-form, .site-footer, .project-pic, .work-tools, .project-actions { display: none !important; }
   body { font-size: 11pt; color: #000; background: #fff; }
   .screen { min-height: 0; padding-block: 1.25rem !important; }
   .services, .contact { background: none; color: #000; }
