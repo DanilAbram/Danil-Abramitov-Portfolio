@@ -195,6 +195,8 @@
   // ---------- My work: project pages ----------
   // The address (#work/sage) decides what is open, so the browser's Back
   // button closes a project and a project link can be shared.
+  // Pressing a card makes its picture fly and grow into the project page;
+  // closing flies it back. With reduced motion everything just appears.
   var caseBox = document.getElementById('case');
   if (caseBox && caseBox.showModal) {
     var pages = Array.prototype.slice.call(caseBox.querySelectorAll('[data-case-page]'));
@@ -202,56 +204,241 @@
     var caseCount = document.getElementById('case-count');
     var nextName = document.getElementById('case-next-name');
     var current = -1;
-    var pushed = false; // did we add the history entry ourselves?
+    var pushed = false;  // did we add the history entry ourselves?
+    var closing = false;
+    var opening = false; // a card was pressed and its picture is getting ready
+    var flying = null;   // card picture hidden while its copy is in the air
+    var canAnimate = !reduceMotion && typeof caseBox.animate === 'function';
+    var EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
+    var FLY = 'cubic-bezier(0.45, 0, 0.1, 1)'; // gentle start, soft landing
 
     var titleOf = function (i) { return pages[i].querySelector('.case-title'); };
-    var syncCase = function () {
+    var heroOf = function (i) { return pages[i].querySelector('.case-hero'); };
+    var cardPic = function (i) {
+      var btn = document.querySelector('[data-case="' + caseIds[i] + '"]');
+      return btn ? btn.closest('.project').querySelector('.project-pic') : null;
+    };
+    var onScreen = function (r) { return r.width > 0 && r.bottom > 90 && r.top < window.innerHeight - 90; };
+    // Transform that makes a box laid out at `to` look like it sits at `from`
+    var flip = function (from, to) {
+      return 'translate(' + (from.left - to.left) + 'px,' + (from.top - to.top) + 'px) scale(' +
+        (from.width / to.width) + ',' + (from.height / to.height) + ')';
+    };
+    var fadeParts = function () {
+      var page = pages[current];
+      return [caseBox.querySelector('.case-bar')]
+        .concat(Array.prototype.slice.call(page.querySelector('.case-body').children))
+        .concat([page.querySelector('.case-thumbs'), caseBox.querySelector('.case-next')]);
+    };
+    var stopAnimations = function () {
+      if (!caseBox.getAnimations) return;
+      caseBox.getAnimations({ subtree: true }).forEach(function (a) { a.cancel(); });
+    };
+    // Run fn when an animation ends, or after ms if the browser has paused it
+    // (background tab). A cancelled animation never runs fn.
+    var after = function (anim, ms, fn) {
+      var done = false;
+      var run = function () { if (!done) { done = true; fn(); } };
+      anim.finished.then(run, function () { done = true; });
+      setTimeout(run, ms);
+    };
+    var land = function () {
+      if (flying) flying.style.visibility = '';
+      flying = null;
+      caseBox.classList.remove('is-flying');
+    };
+    var hideCard = function (pic) {
+      land();
+      flying = pic;
+      pic.style.visibility = 'hidden';
+      caseBox.classList.add('is-flying');
+    };
+    // Page scroll is locked while a project is open; the padding keeps the
+    // page from shifting when its scrollbar goes away
+    var lockPage = function () {
+      if (root.classList.contains('case-open')) return;
+      root.style.setProperty('--sbw', (window.innerWidth - root.clientWidth) + 'px');
+      root.classList.add('case-open');
+    };
+    // Back to the first picture, using the file the card has already loaded
+    var resetGallery = function (i) {
+      var pic = cardPic(i);
+      var img = pic && pic.querySelector('img');
+      var hero = heroOf(i);
+      pages[i].querySelectorAll('.case-thumbs button').forEach(function (t, n) {
+        t.setAttribute('aria-pressed', String(n === 0));
+        if (n === 0) {
+          hero.alt = t.getAttribute('data-alt');
+          hero.src = (img && img.currentSrc) || t.getAttribute('data-src');
+        }
+      });
+      hero.loading = 'eager';
+      return hero;
+    };
+    // Swap in the full-size first picture once it has loaded
+    var sharpen = function (i) {
+      var first = pages[i].querySelector('.case-thumbs button');
+      var big = new Image();
+      big.src = first.getAttribute('data-src');
+      if (!big.decode) return;
+      big.decode().then(function () {
+        if (first.getAttribute('aria-pressed') === 'true' && !closing) heroOf(i).src = big.src;
+      }).catch(function () {});
+    };
+
+    var finishClose = function () {
+      stopAnimations();
+      closing = false;
+      if (caseBox.open) caseBox.close();
+      land();
+      root.classList.remove('case-open');
+    };
+
+    var animateOpen = function (from) {
+      var hero = heroOf(current);
+      var pic = from && cardPic(current);
+      if (!pic) { caseBox.animate({ opacity: [0, 1] }, { duration: 300, easing: 'ease-out' }); return; }
+      var to = hero.getBoundingClientRect();
+      hideCard(pic);
+      var bg = getComputedStyle(caseBox).backgroundColor;
+      caseBox.animate({ backgroundColor: ['rgba(34, 34, 36, 0)', bg] }, { duration: 420, easing: 'ease-out' });
+      after(hero.animate([{ transform: flip(from, to) }, { transform: 'none' }], { duration: 700, easing: FLY }), 1200, land);
+      fadeParts().forEach(function (part, n) {
+        part.animate(
+          [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }],
+          { duration: 480, delay: 260 + Math.min(n, 8) * 35, easing: EASE, fill: 'backwards' });
+      });
+    };
+
+    var animateClose = function () {
+      closing = true;
+      var i = current;
+      var hero = heroOf(i);
+      var now = hero.getBoundingClientRect(); // may still be mid-flight
+      var pic = cardPic(i);
+      var r = null;
+      if (pic) {
+        var card = pic.closest('.project');
+        card.style.transition = 'none';
+        card.classList.add('is-visible');
+        r = pic.getBoundingClientRect();
+        // After Next/Previous the card can be off screen: bring it back first
+        if (r.width && !onScreen(r)) {
+          card.scrollIntoView({ block: 'center', behavior: 'instant' });
+          r = pic.getBoundingClientRect();
+        }
+        card.style.transition = '';
+      }
+      if (!canAnimate) { finishClose(); return; }
+      stopAnimations();
+      if (!r || !onScreen(r) || !onScreen(now)) {
+        after(caseBox.animate({ opacity: [1, 0] }, { duration: 220, easing: 'ease-in', fill: 'forwards' }), 600, finishClose);
+        return;
+      }
+      hideCard(pic);
+      resetGallery(i);
+      var base = hero.getBoundingClientRect();
+      var bg = getComputedStyle(caseBox).backgroundColor;
+      fadeParts().forEach(function (part) {
+        part.animate({ opacity: [1, 0] }, { duration: 180, easing: 'ease-in', fill: 'forwards' });
+      });
+      caseBox.animate({ backgroundColor: [bg, 'rgba(34, 34, 36, 0)'] }, { duration: 400, delay: 80, easing: 'ease-in-out', fill: 'both' });
+      after(hero.animate([{ transform: flip(now, base) }, { transform: flip(r, base) }], { duration: 560, easing: FLY, fill: 'forwards' }), 1000, finishClose);
+    };
+
+    // `from`: where the pressed card's picture was, if a card was pressed
+    var syncCase = function (from) {
       var at = caseIds.indexOf(location.hash.indexOf('#work/') === 0 ? location.hash.slice(6) : '');
       if (at === -1) {
         pushed = false;
-        if (caseBox.open) caseBox.close();
-        root.classList.remove('case-open');
+        if (caseBox.open && !closing) animateClose();
         return;
       }
+      if (closing) finishClose();
       var wasOpen = caseBox.open;
       var changed = at !== current;
+      if (!wasOpen || changed) { resetGallery(at); sharpen(at); }
       current = at;
       pages.forEach(function (p, i) { p.hidden = i !== at; });
       caseBox.setAttribute('aria-labelledby', titleOf(at).id);
       caseCount.textContent = (at + 1) + ' / ' + pages.length;
       nextName.textContent = titleOf((at + 1) % pages.length).textContent;
-      root.classList.add('case-open');
+      lockPage();
       if (!wasOpen) caseBox.showModal();
       if (!wasOpen || changed) {
         titleOf(at).focus({ preventScroll: true });
         caseBox.scrollTop = 0;
       }
+      if (!wasOpen && canAnimate) animateOpen(from);
     };
     var closeCase = function () {
+      if (closing) return;
       if (pushed) { history.back(); return; }
       history.replaceState(null, '', '#work');
       syncCase();
-      document.getElementById('work').scrollIntoView();
     };
 
     document.querySelectorAll('[data-case]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        history.pushState(null, '', '#work/' + btn.getAttribute('data-case'));
-        pushed = true;
-        syncCase();
+        if (opening) return;
+        var id = btn.getAttribute('data-case');
+        var i = caseIds.indexOf(id);
+        var gone = false;
+        var go = function () {
+          if (gone) return;
+          gone = true;
+          opening = false;
+          var pic = cardPic(i);
+          var r = canAnimate && pic ? pic.getBoundingClientRect() : null;
+          history.pushState(null, '', '#work/' + id);
+          pushed = true;
+          syncCase(r && onScreen(r) ? r : null);
+        };
+        opening = true;
+        if (!canAnimate) { go(); return; }
+        // Have the picture ready to paint so the flight never starts blank
+        if (closing) finishClose();
+        var hero = resetGallery(i);
+        if (hero.decode) hero.decode().then(go, go);
+        setTimeout(go, 150);
       });
     });
     caseBox.querySelector('[data-case-close]').addEventListener('click', closeCase);
     caseBox.addEventListener('cancel', function (e) { e.preventDefault(); closeCase(); });
-    // Some browsers close on a second Esc without asking: keep the address right
+    // Some browsers close on a second Esc without asking: tidy up
     caseBox.addEventListener('close', function () {
+      if (caseBox.open) return;
+      finishClose();
       if (location.hash.indexOf('#work/') === 0) closeCase();
     });
+
+    var stepping = false;
+    var showStep = function (to) {
+      history.replaceState(null, '', '#work/' + caseIds[to]);
+      syncCase();
+    };
     caseBox.querySelectorAll('[data-case-step]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var to = (current + Number(btn.getAttribute('data-case-step')) + pages.length) % pages.length;
-        history.replaceState(null, '', '#work/' + caseIds[to]);
-        syncCase();
+        if (closing || stepping) return;
+        var by = Number(btn.getAttribute('data-case-step'));
+        var to = (current + by + pages.length) % pages.length;
+        if (!canAnimate) { showStep(to); return; }
+        stopAnimations();
+        land();
+        stepping = true;
+        var out = pages[current].animate(
+          { opacity: [1, 0], transform: ['none', 'translateX(' + (-28 * by) + 'px)'] },
+          { duration: 160, easing: 'ease-in', fill: 'forwards' });
+        out.finished.catch(function () { stepping = false; });
+        after(out, 500, function () {
+          stepping = false;
+          if (closing || !caseBox.open) return;
+          stopAnimations();
+          showStep(to);
+          pages[to].animate(
+            { opacity: [0, 1], transform: ['translateX(' + (28 * by) + 'px)', 'none'] },
+            { duration: 420, easing: EASE });
+        });
       });
     });
     pages.forEach(function (page) {
@@ -259,13 +446,15 @@
       var thumbs = Array.prototype.slice.call(page.querySelectorAll('.case-thumbs button'));
       thumbs.forEach(function (t) {
         t.addEventListener('click', function () {
+          if (closing) return;
           thumbs.forEach(function (o) { o.setAttribute('aria-pressed', String(o === t)); });
           big.src = t.getAttribute('data-src');
           big.alt = t.getAttribute('data-alt');
+          if (canAnimate) big.animate({ opacity: [0.3, 1] }, { duration: 350, easing: 'ease-out' });
         });
       });
     });
-    window.addEventListener('popstate', syncCase);
+    window.addEventListener('popstate', function () { syncCase(); });
     syncCase();
   }
 

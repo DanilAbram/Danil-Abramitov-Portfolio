@@ -795,7 +795,9 @@ html:not(.js) .project-more { display: none; }
 .project-link:hover { color: var(--accent); }
 
 /* Project page: full-screen dialog */
+.case .container { max-width: 1320px; }
 html.case-open { overflow: hidden; }
+html.case-open body { padding-right: var(--sbw, 0px); }
 .case {
   width: 100%;
   max-width: none;
@@ -811,9 +813,10 @@ html.case-open { overflow: hidden; }
   background: var(--bg);
   color: var(--text);
 }
-.case[open] { animation: case-in 0.5s var(--ease-out); }
-@keyframes case-in { from { clip-path: inset(8% 4% 0 4% round 28px); opacity: 0.3; } }
-.case::backdrop { background: rgba(13, 12, 20, 0.8); }
+.case::backdrop { background: transparent; }
+/* While a card picture flies in or out it travels above the top bar */
+.case.is-flying .case-media { z-index: 3; }
+.case.is-flying .case-hero { will-change: transform; }
 .case-bar { position: sticky; top: 0; z-index: 2; background: var(--bg); border-bottom: 1px solid var(--line); }
 .case-bar-inner, .case-steps { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
 .case-bar-inner { min-height: 4.25rem; }
@@ -838,14 +841,14 @@ html.case-open { overflow: hidden; }
 .icon-back { transform: scaleX(-1); }
 .case-page {
   display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   gap: clamp(2rem, 4vw, 3.5rem);
   align-items: start;
   padding-block: clamp(1.5rem, 4vw, 3rem) clamp(3rem, 7vw, 5rem);
 }
 .case-page[hidden] { display: none; }
 .case-media { position: sticky; top: 7rem; }
-.case-hero { display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; border-radius: 14px; background: var(--tint); box-shadow: var(--shadow-badge); }
+.case-hero { transform-origin: 0 0; display: block; width: 100%; height: auto; aspect-ratio: 8 / 5; object-fit: cover; border-radius: 14px; background: var(--tint); box-shadow: var(--shadow-badge); }
 .case-thumbs { display: flex; gap: 0.75rem; margin-top: 0.9rem; }
 .case-thumbs button {
   width: 8rem;
@@ -1370,7 +1373,7 @@ html.measuring .stack { position: relative; top: auto; transform: none; }
   .project.is-wide, .project.is-flipped { grid-template-columns: 1fr; gap: 1.5rem; }
   .project.is-flipped .project-pic { order: 0; }
   .case-page { grid-template-columns: 1fr; }
-  .case-media { position: static; }
+  .case-media { position: relative; top: auto; }
   .steps { grid-template-columns: 1fr; }
   .step { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.25rem; }
   .step-icon { grid-row: span 2; }
