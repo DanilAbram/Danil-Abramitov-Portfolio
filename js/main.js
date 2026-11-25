@@ -80,42 +80,6 @@
     window.addEventListener('resize', drawGlass);
   }
 
-  // Soft light that follows the mouse. It trails a little behind the arrow and
-  // stops working out frames once it has caught up. Touch never shows it.
-  if (!reduceMotion && window.PointerEvent) {
-    var glow = document.createElement('div');
-    glow.className = 'cursor-glow';
-    glow.setAttribute('aria-hidden', 'true');
-    body.appendChild(glow);
-    var projectBox = document.getElementById('case');
-    var gx = 0, gy = 0, toX = 0, toY = 0, glowOn = false, glowFrame = 0;
-    var moveGlow = function () {
-      gx += (toX - gx) * 0.16;
-      gy += (toY - gy) * 0.16;
-      var there = Math.abs(toX - gx) < 0.3 && Math.abs(toY - gy) < 0.3;
-      if (there) { gx = toX; gy = toY; }
-      glow.style.transform = 'translate3d(' + gx.toFixed(1) + 'px,' + gy.toFixed(1) + 'px,0)';
-      glowFrame = there ? 0 : requestAnimationFrame(moveGlow);
-    };
-    var hideGlow = function () { glowOn = false; glow.classList.remove('is-on'); };
-    window.addEventListener('pointermove', function (e) {
-      if (e.pointerType !== 'mouse') { hideGlow(); return; }
-      // An open project sits above the page, so the light moves in with it
-      var host = projectBox && projectBox.open ? projectBox : body;
-      if (glow.parentNode !== host) host.appendChild(glow);
-      toX = e.clientX;
-      toY = e.clientY;
-      if (!glowOn) {
-        glowOn = true;
-        gx = toX; gy = toY;
-        glow.classList.add('is-on');
-      }
-      if (!glowFrame) glowFrame = requestAnimationFrame(moveGlow);
-    }, { passive: true });
-    document.documentElement.addEventListener('mouseleave', hideGlow);
-    window.addEventListener('blur', hideGlow);
-  }
-
   // ---------- Scroll-linked effects ----------
   // Header background, nav highlight, progress line, hero depth and
   // page stack all run from one per-frame update.

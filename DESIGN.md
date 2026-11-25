@@ -55,7 +55,6 @@ The header has no logo, only the name (first name alone at 345px and below). It 
 ## Motion
 
 - The hero greeting changes every 2s. Arabic is set `dir="rtl"`.
-- A small soft light (`.cursor-glow`, 320px, sky at 17% or less) follows the mouse with a short delay. Mouse only, off with reduced motion, moves into the project page when one is open.
 - Hero art grows and fades in once (1.2s, transform and opacity only); tools strip scrolls continuously.
 - Badge swings in on load, tilts toward the pointer on fine pointers.
 - Scroll: a 3px sky progress line under the header; the hero copy drifts up and fades while the background art moves slower (depth); sections rise in from a soft blur; lists inside them (tags, facts, contact links) arrive one by one (70ms apart); section underlines draw in; the badge swings only when its section is reached; the site preview straightens as it scrolls into view.
