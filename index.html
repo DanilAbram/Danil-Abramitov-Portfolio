@@ -54,12 +54,9 @@
   <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
     <defs>
       <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 16C2.74097 13.48194 2.74097 10.51806 4 8C4.86548 6.26904 6.26904 4.86548 8 4C10.51806 2.74097 13.48194 2.74097 16 4C17.73096 4.86548 19.13452 6.26904 20 8C21.25903 10.51806 21.25903 13.48194 20 16C19.13452 17.73096 17.73096 19.13452 16 20C13.48194 21.25903 10.51806 21.25903 8 20L3 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-      <symbol id="i-check" viewBox="0 0 24 24"><path d="M4 8C4 5.79086 5.79086 4 8 4H16C18.20914 4 20 5.79086 20 8V16C20 18.20914 18.20914 20 16 20H8C5.79086 20 4 18.20914 4 16ZM9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-tick" viewBox="0 0 24 24"><path d="M6 12L10 16L18 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-      <symbol id="i-list" viewBox="0 0 24 24"><path d="M13 6H21M13 12H21M13 18H21M3 6L5 8L9 4M3 12L5 14L9 10M3 18L5 20L9 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-monitor" viewBox="0 0 24 24"><path d="M4 8C4 5.79086 5.79086 4 8 4H16C18.20914 4 20 5.79086 20 8V13C20 15.20914 18.20914 17 16 17H8C5.79086 17 4 15.20914 4 13ZM9 20H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M9 9C9 12 12 15 15 15C12 15 9 18 9 21C9 18 6 15 3 15C6 15 9 12 9 9ZM17 3C17 6.75 17.25 7 21 7C17.25 7 17 7.25 17 11C17 7.25 16.75 7 13 7C16.75 7 17 6.75 17 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-      <symbol id="i-phone-check" viewBox="0 0 24 24"><path d="M7 7C7 4.79086 8.79086 3 11 3H13C15.20914 3 17 4.79086 17 7V17C17 19.20914 15.20914 21 13 21H11C8.79086 21 7 19.20914 7 17Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-mail" viewBox="0 0 24 24"><path d="M12 19H7C4.79086 19 3 17.20914 3 15V9C3 6.79086 4.79086 5 7 5H17C19.20914 5 21 6.79086 21 9V15C21 17.20914 19.20914 19 17 19H12M4 7L7 10C7.64029 10.64029 8.71942 11 10 11H14C15.28058 11 16.35971 10.64029 17 10L20 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-linkedin" viewBox="0 0 24 24"><path d="M8 11V16M8 8H8.01M12 16V13C12 11.89543 12.89543 11 14 11C15.10457 11 16 11.89543 16 13V16M3 5C3 3.89543 3.89543 3 5 3H19C20.10457 3 21 3.89543 21 5V19C21 20.10457 20.10457 21 19 21H5C3.89543 21 3 20.10457 3 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
       <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 21V18C9 17 9 16 10 15C7 15 4 13 4 9C4 7.7 4.5 6.7 5 6C4.6 5 4.6 4 5 3C5 3 6.5 3 9 4C11 3.5 13 3.5 15 4C17.5 3 19 3 19 3C19.4 4 19.4 5 19 6C19.5 6.7 20 7.7 20 9C20 13 17 15 14 15C15 16 15 17 15 18V21M9 19C5 20 5 16 3 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -100,6 +97,7 @@
           <li><a href="#about">About me</a></li>
           <li><a href="#work">My work</a></li>
           <li><a href="#services">What I make</a></li>
+          <li><a href="#process">My process</a></li>
           <li class="nav-contact"><a href="#contact">Contact</a></li>
         </ul>
       </nav>
@@ -340,24 +338,6 @@
             </div>
           </li>
         </ol>
-
-        <ol class="steps" role="list" aria-label="How I build with AI">
-          <li class="step reveal">
-            <svg class="step-icon" aria-hidden="true"><use href="#i-list"/></svg>
-            <h3>Plan it</h3>
-            <p>Decide who the site is for, what it has to say, and how it should look.</p>
-          </li>
-          <li class="step reveal" data-delay="60">
-            <svg class="step-icon" aria-hidden="true"><use href="#i-sparkle"/></svg>
-            <h3>Build it with AI</h3>
-            <p>Describe each part clearly to the AI, then review what it makes and ask for changes.</p>
-          </li>
-          <li class="step reveal" data-delay="120">
-            <svg class="step-icon" aria-hidden="true"><use href="#i-phone-check"/></svg>
-            <h3>Check and improve</h3>
-            <p>Test it on a computer and a phone, and fix anything that looks or works wrong.</p>
-          </li>
-        </ol>
       </div>
     </section>
 
@@ -396,7 +376,69 @@
       </div>
     </section>
 
-    <!-- 5. CONTACT -->
+    <!-- 5. MY PROCESS: on computers the page holds still while the columns slide
+         sideways (main.js + .process in the CSS); on phones you swipe them -->
+    <section class="screen process" id="process" aria-labelledby="process-title">
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><linearGradient id="p-fill" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#0b7fa9"/><stop offset="1" stop-color="#096b90" stop-opacity="0.15"/></linearGradient><clipPath id="p-clip"><rect width="400" height="300" rx="18"/></clipPath></svg>
+      <div class="process-pin">
+        <h2 id="process-title" class="process-title">My process</h2>
+        <div class="process-scroll" role="region" aria-labelledby="process-title" tabindex="0">
+          <div class="process-track">
+            <p class="process-lead">From your first message to a finished project, in six steps.</p>
+            <ol class="process-steps" role="list">
+              <li class="process-step">
+                <svg class="process-art" viewBox="0 0 400 300" aria-hidden="true" focusable="false"><rect width="400" height="300" rx="18" fill="#042b44"/><circle cx="312" cy="66" r="128" fill="url(#p-fill)" clip-path="url(#p-clip)"/><g class="pl"><rect x="78" y="78" width="196" height="112" rx="26"/><path d="M122 190V230L166 190M110 118H236M110 150H190"/></g></svg>
+                <div class="process-info">
+                  <h3><span class="process-num" aria-hidden="true">1</span>Tell me</h3>
+                  <p>Send me a message: what you need, who it is for and when you need it. Links to websites or apps you like help a lot.</p>
+                </div>
+              </li>
+              <li class="process-step">
+                <svg class="process-art" viewBox="0 0 400 300" aria-hidden="true" focusable="false"><rect width="400" height="300" rx="18" fill="#042b44"/><circle cx="158" cy="150" r="92" fill="url(#p-fill)"/><g class="pl"><circle cx="158" cy="150" r="92"/><circle cx="246" cy="150" r="92"/></g><g class="pd"><circle cx="180" cy="150" r="6"/><circle cx="202" cy="150" r="6"/><circle cx="224" cy="150" r="6"/></g></svg>
+                <div class="process-info">
+                  <h3><span class="process-num" aria-hidden="true">2</span>Talk</h3>
+                  <p>I read everything and reply with my questions. Together we agree on what to make and what can wait.</p>
+                </div>
+              </li>
+              <li class="process-step">
+                <svg class="process-art" viewBox="0 0 400 300" aria-hidden="true" focusable="false"><rect width="400" height="300" rx="18" fill="#042b44"/><rect x="152" y="44" width="96" height="56" rx="10" fill="url(#p-fill)"/><g class="pl"><rect x="152" y="44" width="96" height="56" rx="10"/><path d="M200 100V142M96 184V142H304V184M200 142V184"/><rect x="52" y="184" width="88" height="68" rx="10"/><rect x="156" y="184" width="88" height="68" rx="10"/><rect x="260" y="184" width="88" height="68" rx="10"/><path d="M70 208H122M70 228H104M174 208H226M174 228H208M278 208H330M278 228H312"/></g></svg>
+                <div class="process-info">
+                  <h3><span class="process-num" aria-hidden="true">3</span>Plan</h3>
+                  <p>I write down every page or screen, what it has to say and what comes first. You check it before I start.</p>
+                </div>
+              </li>
+              <li class="process-step">
+                <svg class="process-art" viewBox="0 0 400 300" aria-hidden="true" focusable="false"><rect width="400" height="300" rx="18" fill="#042b44"/><g stroke="#a1ccdc" stroke-width="2"><circle cx="80" cy="92" r="34" fill="#08171e"/><circle cx="140" cy="92" r="34" fill="#042b44"/><circle cx="200" cy="92" r="34" fill="#096b90"/><circle cx="260" cy="92" r="34" fill="#71b7d5"/><circle cx="320" cy="92" r="34" fill="#a1ccdc"/></g><g class="pl"><path d="M56 226C136 126 244 306 344 196"/><path d="M56 226L136 160M344 196L262 262" stroke-dasharray="4 7"/></g><g class="pd"><rect x="49" y="219" width="14" height="14"/><rect x="337" y="189" width="14" height="14"/><circle cx="136" cy="160" r="6"/><circle cx="262" cy="262" r="6"/></g></svg>
+                <div class="process-info">
+                  <h3><span class="process-num" aria-hidden="true">4</span>Design</h3>
+                  <p>I choose the colours, fonts and layout, and show you the look. We change it until it feels right.</p>
+                </div>
+              </li>
+              <li class="process-step">
+                <svg class="process-art" viewBox="0 0 400 300" aria-hidden="true" focusable="false"><rect width="400" height="300" rx="18" fill="#042b44"/><circle cx="200" cy="150" r="112" fill="url(#p-fill)"/><g class="pl"><path d="M132 88L70 150L132 212M268 88L330 150L268 212M228 66L172 234" stroke-width="9"/></g></svg>
+                <div class="process-info">
+                  <h3><span class="process-num" aria-hidden="true">5</span>Build</h3>
+                  <p>I build it with code and AI tools, review every part, and show you how it is going along the way.</p>
+                </div>
+              </li>
+              <li class="process-step">
+                <svg class="process-art" viewBox="0 0 400 300" aria-hidden="true" focusable="false"><rect width="400" height="300" rx="18" fill="#042b44"/><circle cx="168" cy="150" r="104" fill="url(#p-fill)"/><g class="pl"><rect x="66" y="68" width="216" height="142" rx="14"/><path d="M38 230H278"/><path d="M134 138L162 166L214 112" stroke-width="7"/></g><rect x="276" y="116" width="76" height="130" rx="16" fill="#042b44"/><g class="pl"><rect x="276" y="116" width="76" height="130" rx="16"/><path d="M304 228H324"/></g></svg>
+                <div class="process-info">
+                  <h3><span class="process-num" aria-hidden="true">6</span>Check and launch</h3>
+                  <p>I test it on a computer and a phone, fix what looks or works wrong, and put it online when you say it is ready.</p>
+                </div>
+              </li>
+            </ol>
+            <div class="process-end">
+              <p>Have something in mind?</p>
+              <a class="btn btn-outline" href="#contact" data-topic="Project">Start a project <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. CONTACT -->
     <section class="screen contact" id="contact" aria-labelledby="contact-title">
       <div class="container contact-grid">
         <div class="contact-intro reveal">

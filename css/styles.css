@@ -720,22 +720,6 @@ html.liquid .site-header::before {
 
 /* What I can do */
 .services { background: var(--tint); }
-.step-icon {
-  width: 3rem; height: 3rem;
-  padding: 0.7rem;
-  border-radius: 8px;
-  background: var(--surface);
-  color: var(--accent);
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  box-shadow: var(--shadow-soft);
-  transition: transform 0.3s var(--ease-out), background-color 0.3s, color 0.3s;
-}
-.step:hover .step-icon { transform: translateY(-2px) rotate(-6deg); background: var(--accent-strong); color: var(--on-accent); }
-
 /* My work: cards */
 .work-head {
   display: flex;
@@ -933,28 +917,6 @@ html.case-open body { padding-right: var(--sbw, 0px); }
 .case-next .icon { width: 2rem; height: 2rem; color: var(--band-text); transition: transform 0.3s var(--ease-out); }
 .case-next:hover .icon { transform: translateX(6px); }
 .case-next:focus-visible { outline: 3px solid var(--leaf); outline-offset: -5px; }
-
-.steps {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.5rem, 4vw, 3rem);
-  margin-top: clamp(3rem, 7vw, 5rem);
-  padding-top: clamp(2rem, 4vw, 3rem);
-  border-top: 1px solid var(--line);
-  counter-reset: step;
-}
-.step { counter-increment: step; }
-.step h3 {
-  margin-top: 1.1rem;
-  font-size: 1.2rem;
-  font-weight: 800;
-  letter-spacing: -0.015em;
-}
-.step h3::before {
-  content: counter(step) ". ";
-  color: var(--accent);
-}
-.step p { margin-top: 0.4rem; color: var(--text-muted); }
 
 /* Contact: the closing band */
 .contact {
@@ -1182,6 +1144,108 @@ html { scroll-snap-type: y proximity; }
   letter-spacing: -0.015em;
 }
 .service p { margin-top: 0.6rem; max-width: 44ch; color: var(--text-muted); }
+
+/* My process: a huge title over ruled columns */
+.process { --rule: rgba(161, 204, 220, 0.3); background-color: var(--bg); }
+.pin-on .process.screen { justify-content: flex-start; }
+.process-title {
+  padding-inline: var(--gutter);
+  font-size: clamp(3rem, 14vw, 5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+.process-scroll {
+  margin-top: 1.5rem;
+  overflow-x: auto;
+  border-block: 1px solid var(--rule);
+  scroll-snap-type: x proximity;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+}
+.process-scroll:focus-visible { outline-offset: -3px; }
+.process-track { display: flex; width: max-content; }
+.process-steps { display: flex; margin: 0; padding: 0; list-style: none; }
+.process-lead,
+.process-step,
+.process-end { flex: none; padding: 1.75rem var(--gutter); }
+.process-step, .process-end { border-left: 1px solid var(--rule); }
+.process-lead {
+  display: none;
+  font-size: 1.2rem;
+  color: var(--text-muted);
+}
+.process-step {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: min(78vw, 24rem);
+  scroll-snap-align: start;
+}
+.process-step:first-child { border-left: 0; }
+.process-art { display: block; width: 100%; height: auto; }
+.process-art .pl { fill: none; stroke: var(--leaf); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.process-art .pd { fill: var(--text); }
+.process-info h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.3vw, 2.1rem);
+  letter-spacing: -0.015em;
+}
+.process-num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.1rem; height: 2.1rem;
+  border-radius: 50%;
+  background: var(--text);
+  color: var(--ink);
+  font: 800 1rem/1 var(--font-display);
+  letter-spacing: 0;
+}
+.process-info p { margin-top: 0.75rem; max-width: 40ch; color: var(--text-muted); }
+.process-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1.25rem;
+  width: min(78vw, 22rem);
+}
+.process-end p { font-family: var(--font-serif); font-size: clamp(1.6rem, 2.6vw, 2.3rem); line-height: 1.2; }
+
+/* Computers: 24 + 6 x 34 + 32 = 260 of the screen width, so it slides by 160 */
+.pin-on .process { --slide: 160vw; height: calc(100vh + var(--slide)); padding-block: 0 !important; }
+.pin-on .process.stack { transform-origin: 50% calc(100% - 70vh); }
+.pin-on .process-pin {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-top: 6rem;
+  overflow: hidden; /* for browsers without clip */
+  overflow: clip;
+}
+.pin-on .process-title { font-size: min(8.2vw, 15vh); padding-left: clamp(1rem, 2.4vw, 3rem); }
+.pin-on .process-scroll { flex: 1; min-height: 0; margin-top: 1.5rem; overflow: visible; border-bottom: 0; }
+.pin-on .process-track {
+  height: 100%;
+  transform: translate3d(calc(var(--process-p, 0) * var(--slide) * -1), 0, 0);
+  will-change: transform;
+}
+.pin-on .process-steps { height: 100%; }
+.pin-on .process-lead,
+.pin-on .process-step,
+.pin-on .process-end { padding: clamp(1.25rem, 3.4vh, 2.5rem) clamp(1rem, 2.4vw, 3rem); }
+.pin-on .process-lead { display: block; width: 24vw; }
+.pin-on .process-step { width: 34vw; height: 100%; border-left: 1px solid var(--rule); }
+.pin-on .process-end { width: 32vw; }
+.pin-on .process-art { flex: 1; min-height: 0; }
+.pin-on .process-info { flex: none; min-height: 11.5rem; }
 
 /* Contact: intro and links on the blue band, form on a light card */
 .contact-grid {
@@ -1437,7 +1501,7 @@ html.js .badge-stage.is-visible .badge { animation-play-state: running; }
 /* Page stack: each full-screen page sticks once fully read, then the
    next page slides up over it like a card while it shrinks and dims.
    JS adds .stack and sets --stick (sticky offset) and --cover (0..1). */
-.hero, .about, .projects { background-color: var(--bg); }
+.hero, .about, .projects, .process { background-color: var(--bg); }
 .screen:focus { outline: none; }
 .stack {
   position: sticky;
@@ -1480,10 +1544,6 @@ html.measuring .stack { position: relative; top: auto; transform: none; }
   .project.is-flipped .project-pic { order: 0; }
   .case-page { grid-template-columns: 1fr; }
   .case-media { position: relative; top: auto; }
-  .steps { grid-template-columns: 1fr; }
-  .step { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 1.25rem; }
-  .step-icon { grid-row: span 2; }
-  .step h3 { margin-top: 0.2rem; }
 }
 
 @media (max-width: 759px) {

@@ -96,7 +96,36 @@
   if (stack.length) root.classList.add('stack-on');
 
   var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-  var m = { vh: 0, docH: 0, tops: [], heroH: 0 }; // filled by the first measure()
+  var m = { vh: 0, docH: 0, tops: [], heights: [], heroH: 0 }; // filled by the first measure()
+
+  // My process slides sideways only where there is room for it
+  var processBox = document.getElementById('process');
+  var processAt = sections.indexOf(processBox);
+  var processScroll = processBox && processBox.querySelector('.process-scroll');
+  var pinned = false;
+  var pinRoom = window.matchMedia('(min-width: 900px) and (min-height: 640px)');
+  function setPin() {
+    pinned = !!processBox && !reduceMotion && pinRoom.matches;
+    root.classList.toggle('pin-on', pinned);
+    if (!processScroll) return;
+    // Swiped by hand elsewhere, so the keyboard must be able to reach it
+    if (pinned) processScroll.removeAttribute('tabindex');
+    else processScroll.setAttribute('tabindex', '0');
+  }
+  setPin();
+  if (pinRoom.addEventListener) {
+    pinRoom.addEventListener('change', function () {
+      setPin();
+      if (pinned && processScroll) processScroll.scrollLeft = 0; // start from the first column
+    });
+  }
+  if (processScroll) {
+    // The button at the end can be reached with Tab while it is off screen
+    processScroll.addEventListener('focusin', function (e) {
+      if (!pinned || e.target === processScroll || !m.vh || !e.target.matches(':focus-visible')) return;
+      window.scrollTo(0, m.tops[processAt] + m.heights[processAt] - m.vh);
+    });
+  }
   var currentHash;
   var scrolledState;
 
@@ -109,7 +138,7 @@
     var start = main.offsetTop;
     var tops = [];
     heights.reduce(function (y, h, i) { tops[i] = y; return y + h; }, start);
-    m = { vh: vh, docH: root.scrollHeight, tops: tops, heroH: heights[0] || vh };
+    m = { vh: vh, docH: root.scrollHeight, tops: tops, heights: heights, heroH: heights[0] || vh };
     // ---- writes ----
     stack.forEach(function (s, i) {
       // Tall pages stick only once their bottom reaches the screen bottom,
@@ -160,6 +189,11 @@
     var max = m.docH - vh;
     root.style.setProperty('--progress', max > 0 ? clamp01(y / max).toFixed(4) : 0);
     if (hero) hero.style.setProperty('--hero-p', clamp01(y / m.heroH).toFixed(4));
+    // My process: the columns slide sideways while the page holds still
+    if (pinned && processAt > -1) {
+      var run = m.heights[processAt] - vh;
+      processBox.style.setProperty('--process-p', run > 0 ? clamp01((y - m.tops[processAt]) / run).toFixed(5) : 0);
+    }
   }
 
   var ticking = false;
