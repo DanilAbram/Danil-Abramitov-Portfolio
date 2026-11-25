@@ -8,11 +8,11 @@ web
 
 ## Stack
 
-Static HTML / CSS / vanilla JS, no framework, no build step (user's choice). Intended for free static hosting (e.g. GitHub Pages) — hosting not yet set up.
+Static HTML / CSS / vanilla JS, no framework, files edited directly (user's choice). Vercel runs `build.js` on deploy (no dependencies) to minify and inline CSS/JS and add the security policy.
 
 ## Users
 
-Two groups: (1) recruiters and hiring managers in Ottawa screening for client service, customer support and admin roles; (2) customers (small businesses and individuals) who may hire Danil for a simple website built with AI or for data entry and admin work. Both often open the link on a phone.
+Two groups: (1) recruiters and hiring managers in Ottawa screening for client service, customer support and admin roles; (2) customers (small businesses and individuals) who may hire Danil for a website, a mobile app or an AI tool. Both often open the link on a phone.
 
 ## Product Purpose
 
@@ -28,14 +28,14 @@ Shared as a link alongside job applications; the downloadable PDF CV remains the
 
 ## Capabilities and Constraints
 
-- Five full-screen parts: Hello (contact button), About me, What I can make for you (Websites with AI; Data entry & admin), My work, Request form.
+- Five full-screen parts: Hello (contact button), About me, My work, What I can make for you (Websites, Mobile apps, AI tools), Get in touch (form). Hero and About me wording is Danil's own.
 - The request form sends through FormSubmit (free, no account) straight to Danil's Gmail. It needs a one-time activation click in the first email FormSubmit sends. A mailto backup appears only if sending fails.
-- Contact: email only; Danil's phone number is never shown. Visitors may leave their own phone number in the form (optional).
+- Contact: email only; Danil's phone number is never shown. In the form, visitors leave their own email or phone number (one is enough).
 - Photo: `assets/danil-source.jpg` (provided by Danil); the badge shows the 256px crop `assets/danil-avatar.webp` in a circle.
 
 ## Brand Commitments
 
-- Dark-only design in purple (#6a4fd1 / #b4a6f7), adapted from Anima's site style. User's choice: it replaced the earlier white and green, then blue; no blue anywhere.
+- Dark-only design in Danil's five blues (#042B44, #096B90, #A1CCDC, #08171E, #71B7D5), adapted from Anima's site style. User's choice on 2026-11-25; it replaced the purple (the older "no blue" rule no longer applies).
 - Should read as a modern website, not a replica of the paper resume layout.
 - No CV download on the site; contact is by email, LinkedIn (danil-abramitov-98378844a) and GitHub (DanilAbram).
 - Work-history section removed at the user's request; the "Websites & AI" section covers only confirmed facts (builds websites with AI; this site is the example).

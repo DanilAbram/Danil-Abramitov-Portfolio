@@ -2,7 +2,7 @@
 
 My personal resume website: client service, customer support, computer skills, and websites built with AI.
 
-Plain HTML, CSS and JavaScript. No build step.
+Plain HTML, CSS and JavaScript. You edit the files directly; nothing to install.
 
 ## Run locally
 
@@ -14,4 +14,4 @@ Then open http://localhost:5173.
 
 ## Deploy
 
-Static site, deployed on Vercel: import this repo with framework preset **Other**, no build command, output directory `.` (root).
+Vercel deploys every push to `main`. `vercel.json` tells it to run `node build.js`, which makes a smaller copy of the site in `dist/` (CSS and JavaScript inside the page, security rules added). To try that copy yourself: `node build.js`.

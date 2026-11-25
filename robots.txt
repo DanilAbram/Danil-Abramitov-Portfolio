@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://danilabramitov.vercel.app/sitemap.xml

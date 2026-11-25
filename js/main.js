@@ -44,12 +44,41 @@
   }
 
   // Lists that appear one item after another once their block is revealed
-  document.querySelectorAll('.tags, .facts, .offer-list, .contact-alt, .request-form').forEach(function (list) {
+  document.querySelectorAll('.tags, .facts, .contact-alt').forEach(function (list) {
     list.classList.add('stagger');
     Array.prototype.forEach.call(list.children, function (child, i) {
       child.style.setProperty('--i', i);
     });
   });
+
+  // Liquid glass header: draws the map that tells the browser how far to bend
+  // the picture behind the glass. Chromium only; others keep the plain blur.
+  var glassMap = document.getElementById('liquid-map');
+  if (glassMap && navigator.userAgentData && window.matchMedia('(min-width: 900px)').matches) {
+    var drawGlass = function () {
+      var w = Math.round(Math.min(1120, document.documentElement.clientWidth - 16));
+      var h = header.offsetHeight - 10;
+      var edge = 15;
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '">' +
+        '<defs><linearGradient id="x"><stop stop-color="red" stop-opacity="0"/><stop offset="1" stop-color="red"/></linearGradient>' +
+        '<linearGradient id="y" x2="0" y2="1"><stop stop-color="lime" stop-opacity="0"/><stop offset="1" stop-color="lime"/></linearGradient>' +
+        '<filter id="b"><feGaussianBlur stdDeviation="7"/></filter></defs>' +
+        '<rect width="100%" height="100%" fill="black"/>' +
+        '<rect width="100%" height="100%" fill="url(#x)"/>' +
+        '<rect width="100%" height="100%" fill="url(#y)" style="mix-blend-mode:screen"/>' +
+        '<rect x="' + edge + '" y="' + edge + '" width="' + (w - 2 * edge) + '" height="' + (h - 2 * edge) +
+        '" rx="' + (h / 2 - edge) + '" fill="rgb(128,128,0)" filter="url(#b)"/></svg>';
+      glassMap.setAttribute('href', 'data:image/svg+xml,' + encodeURIComponent(svg));
+      glassMap.setAttribute('width', w);
+      glassMap.setAttribute('height', h);
+    };
+    window.addEventListener('load', function () {
+      requestAnimationFrame(function () {
+        setTimeout(function () { drawGlass(); document.documentElement.classList.add('liquid'); }, 0);
+      });
+    });
+    window.addEventListener('resize', drawGlass);
+  }
 
   // ---------- Scroll-linked effects ----------
   // Header background, nav highlight, progress line, hero depth and
@@ -67,15 +96,17 @@
   if (stack.length) root.classList.add('stack-on');
 
   var clamp01 = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
-  var m = { vh: window.innerHeight, docH: 0, tops: [], heroH: 0 };
+  var m = { vh: 0, docH: 0, tops: [], heroH: 0 }; // filled by the first measure()
   var currentHash;
   var scrolledState;
 
   function measure() {
     // ---- reads ----
+    var y = window.scrollY;
     var vh = window.innerHeight;
     var heights = sections.map(function (s) { return s.offsetHeight; });
-    var start = main.offsetTop + (parseFloat(getComputedStyle(sections[0]).marginTop) || 0);
+    // The hero's negative margin is already part of main.offsetTop
+    var start = main.offsetTop;
     var tops = [];
     heights.reduce(function (y, h, i) { tops[i] = y; return y + h; }, start);
     m = { vh: vh, docH: root.scrollHeight, tops: tops, heroH: heights[0] || vh };
@@ -85,12 +116,15 @@
       // so every part of them can still be read
       s.style.setProperty('--stick', Math.min(0, vh - heights[i]) + 'px');
     });
-    scrollFrame();
+    paint(y);
   }
 
   function scrollFrame() {
     ticking = false;
-    var y = window.scrollY;
+    if (m.vh) paint(window.scrollY);
+  }
+
+  function paint(y) {
     var vh = m.vh;
 
     // Header turns solid once the page is scrolled
@@ -136,7 +170,10 @@
   function scheduleMeasure() {
     if (measureQueued) return;
     measureQueued = true;
-    requestAnimationFrame(function () { measureQueued = false; measure(); });
+    // Just after a frame: the layout is ready, so reading it costs nothing
+    requestAnimationFrame(function () {
+      setTimeout(function () { measureQueued = false; measure(); }, 0);
+    });
   }
 
   window.addEventListener('scroll', schedule, { passive: true });
@@ -144,10 +181,36 @@
   window.addEventListener('load', scheduleMeasure);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleMeasure);
   if ('ResizeObserver' in window) {
-    var ro = new ResizeObserver(scheduleMeasure);
+    // Called right after layout, on start and whenever a section changes size
+    var ro = new ResizeObserver(measure);
     sections.forEach(function (s) { ro.observe(s); });
+  } else {
+    scheduleMeasure();
   }
-  scheduleMeasure();
+
+  // Links to a page section (menu, logo, Back to top). The sections stick, so
+  // the browser thinks the ones above are already on screen and barely moves.
+  // Scroll to their real place instead.
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var link = e.target.closest && e.target.closest('a[href^="#"]');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    var at = sections.findIndex(function (s) { return '#' + s.id === href; });
+    if (at === -1) return;
+    e.preventDefault();
+    if (caseBox && caseBox.open && finishClose) finishClose(); // link inside a project page
+    if (location.hash !== href) history.pushState(null, '', href);
+    pushed = false;
+    measure();
+    var gap = parseFloat(getComputedStyle(root).scrollPaddingTop) || 0;
+    window.scrollTo(0, Math.max(0, m.tops[at] - gap));
+    // Keyboard and screen reader users continue from that section
+    var target = sections[at];
+    target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+    target.addEventListener('blur', function () { target.removeAttribute('tabindex'); }, { once: true });
+  });
 
   // Reveal on scroll
   var reveals = document.querySelectorAll('.reveal');
@@ -301,7 +364,7 @@
       var to = hero.getBoundingClientRect();
       hideCard(pic);
       var bg = getComputedStyle(caseBox).backgroundColor;
-      caseBox.animate({ backgroundColor: ['rgba(34, 34, 36, 0)', bg] }, { duration: 420, easing: 'ease-out' });
+      caseBox.animate({ backgroundColor: ['rgba(8, 23, 30, 0)', bg] }, { duration: 420, easing: 'ease-out' });
       after(hero.animate([{ transform: flip(from, to) }, { transform: 'none' }], { duration: 700, easing: FLY }), 1200, land);
       fadeParts().forEach(function (part, n) {
         part.animate(
@@ -342,7 +405,7 @@
       fadeParts().forEach(function (part) {
         part.animate({ opacity: [1, 0] }, { duration: 180, easing: 'ease-in', fill: 'forwards' });
       });
-      caseBox.animate({ backgroundColor: [bg, 'rgba(34, 34, 36, 0)'] }, { duration: 400, delay: 80, easing: 'ease-in-out', fill: 'both' });
+      caseBox.animate({ backgroundColor: [bg, 'rgba(8, 23, 30, 0)'] }, { duration: 400, delay: 80, easing: 'ease-in-out', fill: 'both' });
       after(hero.animate([{ transform: flip(now, base) }, { transform: flip(r, base) }], { duration: 560, easing: FLY, fill: 'forwards' }), 1000, finishClose);
     };
 
@@ -488,7 +551,7 @@
 
   // Hero greeting: "hello" in the world's most spoken languages
   var word = document.querySelector('.greeting-word');
-  if (word && !reduceMotion) {
+  if (word && !reduceMotion && word.animate) {
     var greetings = [
       { text: 'Hello', lang: 'en' },
       { text: 'Hola', lang: 'es' },
@@ -509,20 +572,23 @@
       { text: 'Cześć', lang: 'pl' }
     ];
     var gi = 0;
-    setInterval(function () {
+    var OUT = { opacity: 0, transform: 'translateY(-0.35em)' };
+    var IN = { opacity: 0, transform: 'translateY(0.35em)' };
+    var REST = { opacity: 1, transform: 'none' };
+    var nextGreeting = function () {
       if (document.hidden) return;
       gi = (gi + 1) % greetings.length;
-      word.classList.add('is-leaving');
+      var leave = word.animate([REST, OUT], { duration: 350, easing: 'ease-out', fill: 'forwards' });
       setTimeout(function () {
         word.textContent = greetings[gi].text;
         word.setAttribute('lang', greetings[gi].lang);
         word.setAttribute('dir', greetings[gi].lang === 'ar' ? 'rtl' : 'ltr');
-        word.classList.remove('is-leaving');
-        word.classList.add('is-entering');
-        void word.offsetWidth; // restart transition from the entering state
-        word.classList.remove('is-entering');
+        word.animate([IN, REST], { duration: 450, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+        leave.cancel();
       }, 350);
-    }, 2000);
+    };
+    // The first "Hello" stays until the page has settled
+    setTimeout(function () { nextGreeting(); setInterval(nextGreeting, 2000); }, 4000);
   }
 
   // Name badge: tilts gently toward the pointer (fine pointers only)
@@ -552,19 +618,7 @@
     });
   }
 
-  // "Ask about ..." links pre-select the matching service in the form
-  document.querySelectorAll('[data-service]').forEach(function (link) {
-    link.addEventListener('click', function () {
-      var value = link.getAttribute('data-service') === 'website' ? 'A website' : 'Data entry & admin help';
-      var radio = document.querySelector('input[name="service"][value="' + value + '"]');
-      if (radio) {
-        radio.checked = true;
-        radio.dispatchEvent(new Event('input', { bubbles: true }));
-      }
-    });
-  });
-
-  // Request form: checks the fields, then sends the request to Danil's
+  // Contact form: checks the fields, then sends the message to Danil's
   // inbox through FormSubmit (no server of our own). Falls back to a
   // ready-made email if the service can't be reached.
   var form = document.getElementById('request-form');
@@ -573,16 +627,46 @@
     var ENDPOINT = 'https://formsubmit.co/ajax/' + TO;
     var statusEl = document.getElementById('form-status');
     var doneEl = document.getElementById('form-done');
+    var kindField = document.getElementById('kind-field');
+    var reachField = document.getElementById('reach-field');
     var sendBtn = form.querySelector('.send-btn');
     var sendLabel = form.querySelector('.send-label');
     var sending = false;
+    var HINTS = {
+      Project: 'Your idea, who it is for, and any deadline.',
+      Question: 'What would you like to ask or tell me?'
+    };
+
+    var chosen = function (name) {
+      var el = form.querySelector('input[name="' + name + '"]:checked');
+      return el ? el.value : '';
+    };
+    // "Start a project" shows one more question; the other choice hides it
+    var showTopic = function () {
+      var topic = chosen('topic');
+      kindField.hidden = topic !== 'Project';
+      form.elements.details.placeholder = HINTS[topic] || HINTS.Project;
+    };
+    form.addEventListener('change', function (e) {
+      if (e.target.name === 'topic') showTopic();
+    });
+    // "Start a project" links choose that answer for the visitor
+    document.querySelectorAll('[data-topic]').forEach(function (link) {
+      link.addEventListener('click', function () {
+        var radio = form.querySelector('input[name="topic"][value="' + link.getAttribute('data-topic') + '"]');
+        if (!radio) return;
+        radio.checked = true;
+        radio.dispatchEvent(new Event('input', { bubbles: true }));
+        showTopic();
+      });
+    });
 
     var setSending = function (on) {
       sending = on;
       form.classList.toggle('is-sending', on);
       form.setAttribute('aria-busy', on ? 'true' : 'false');
       if (sendBtn) sendBtn.disabled = on;
-      if (sendLabel) sendLabel.textContent = on ? 'Sending…' : 'Send request';
+      if (sendLabel) sendLabel.textContent = on ? 'Sending…' : 'Send message';
     };
 
     // kind: '' | 'error'; mailHref adds an "email me instead" link
@@ -599,9 +683,9 @@
       }
     };
 
-    var showDone = function (name, email) {
+    var showDone = function (name, reach) {
       document.getElementById('done-name').textContent = name;
-      document.getElementById('done-email').textContent = email;
+      document.getElementById('done-reach').textContent = reach;
       form.hidden = true;
       doneEl.hidden = false;
       doneEl.focus();
@@ -614,7 +698,7 @@
       if (wrap) wrap.classList.toggle('has-error', !!msg);
       if (fieldEl && fieldEl.setAttribute) {
         if (msg) { fieldEl.setAttribute('aria-invalid', 'true'); fieldEl.setAttribute('aria-describedby', id); }
-        else fieldEl.removeAttribute('aria-invalid');
+        else { fieldEl.removeAttribute('aria-invalid'); fieldEl.removeAttribute('aria-describedby'); }
       }
     };
 
@@ -623,21 +707,25 @@
       var name = form.elements.name.value.trim();
       var email = form.elements.email.value.trim();
       var phone = form.elements.phone.value.trim();
-      var company = form.elements.company.value.trim();
       var details = form.elements.details.value.trim();
-      var serviceEl = form.querySelector('input[name="service"]:checked');
-      var service = serviceEl ? serviceEl.value : '';
+      var topic = chosen('topic');
+      var kind = topic === 'Project' ? chosen('kind') : '';
 
       var firstBad = null;
       var check = function (ok, id, el, msg) {
         setError(id, el, ok ? '' : msg);
         if (!ok && !firstBad) firstBad = el;
       };
+      check(!!topic, 'f-topic-error', form.querySelector('input[name="topic"]'), 'Please choose one.');
+      check(topic !== 'Project' || !!kind, 'f-kind-error', form.querySelector('input[name="kind"]'), 'Please choose one. “Not sure yet” is fine too.');
       check(name.length > 0, 'f-name-error', form.elements.name, 'Please enter your name.');
-      check(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email), 'f-email-error', form.elements.email,
-        email ? 'That email looks incomplete. Please check it.' : 'Please enter your email so I can reply.');
-      check(!!service, 'f-service-error', form.querySelector('input[name="service"]'), 'Please choose what you need.');
-      check(details.length > 0, 'f-details-error', form.elements.details, 'Please tell me a little about what you need.');
+      // One way to reply is enough, but what is filled in has to be complete
+      var none = !email && !phone;
+      check(!none && (!email || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)), 'f-email-error', form.elements.email,
+        none ? 'Please leave an email or a phone number so I can reply.' : 'That email looks incomplete. Please check it.');
+      check(!phone || phone.replace(/\D/g, '').length >= 7, 'f-phone-error', form.elements.phone,
+        'That number looks too short. Please check it.');
+      check(details.length > 0, 'f-details-error', form.elements.details, 'Please write a few words so I know how to help.');
 
       if (firstBad) {
         showStatus('Please fix the highlighted fields.', 'error');
@@ -647,26 +735,25 @@
       if (sending) return;
 
       // Bots fill the hidden field: act as if it worked, send nothing
-      if (form.elements._honey && form.elements._honey.value) { showDone(name, email); return; }
+      if (form.elements._honey && form.elements._honey.value) { showDone(name, email || phone); return; }
 
-      var subject = 'New request: ' + service + ' from ' + name + (company ? ' (' + company + ')' : '');
+      var about = topic === 'Project' ? 'Project: ' + kind : 'Question';
+      var subject = (topic === 'Project' ? 'New project request (' + kind + ')' : 'New message') + ' from ' + name;
       var payload = {
         name: name,
-        email: email,
-        phone: phone || '-',
-        company: company || '-',
-        service: service,
+        about: about,
         message: details,
         _subject: subject,
         _template: 'table',
         _captcha: 'false'
       };
+      if (email) payload.email = email; // FormSubmit uses it as the reply address
+      if (phone) payload.phone = phone;
 
       // Ready-made email as a backup if the service can't be reached
       var mailBody = [
-        'Name: ' + name, 'Email: ' + email,
-        phone ? 'Phone: ' + phone : null, company ? 'Business: ' + company : null,
-        'Service: ' + service, '', details
+        'Name: ' + name, email ? 'Email: ' + email : null, phone ? 'Phone: ' + phone : null,
+        'About: ' + about, '', details
       ].filter(function (l) { return l !== null; }).join('\n');
       var mailHref = 'mailto:' + TO + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(mailBody);
 
@@ -686,12 +773,12 @@
             if (!res.ok || String(data.success) !== 'true') throw new Error(data.message || 'Send failed');
           });
         })
-        .then(function () { showDone(name, email); })
+        .then(function () { showDone(name, email || phone); })
         .catch(function () {
           if (navigator.onLine === false) {
-            showStatus('You seem to be offline. Check your connection and press Send request again.', 'error');
+            showStatus('You seem to be offline. Check your connection and press Send message again.', 'error');
           } else {
-            showStatus('Sorry, your request didn’t go through. Please try again, or ', 'error', mailHref);
+            showStatus('Sorry, your message didn’t go through. Please try again, or ', 'error', mailHref);
           }
         })
         .then(function () {
@@ -704,10 +791,11 @@
     if (sendAnother) {
       sendAnother.addEventListener('click', function () {
         form.reset();
+        showTopic();
         doneEl.hidden = true;
         form.hidden = false;
         showStatus('', '');
-        form.elements.name.focus();
+        form.querySelector('input[name="topic"]').focus();
       });
     }
 
@@ -715,13 +803,21 @@
     form.addEventListener('input', function (e) {
       var t = e.target;
       if (!t || !t.closest) return;
-      var wrap = t.closest('.field');
-      if (wrap && wrap.classList.contains('has-error')) {
+      // Email and phone share one question, so filling either clears both
+      var wraps = reachField.contains(t)
+        ? Array.prototype.slice.call(reachField.querySelectorAll('.field'))
+        : [t.closest('.field')];
+      wraps.forEach(function (wrap) {
+        if (!wrap || !wrap.classList.contains('has-error')) return;
         var err = wrap.querySelector('.field-error');
         if (err) err.textContent = '';
         wrap.classList.remove('has-error');
-        t.removeAttribute('aria-invalid');
-      }
+        wrap.querySelectorAll('[aria-invalid]').forEach(function (el) {
+          el.removeAttribute('aria-invalid');
+          el.removeAttribute('aria-describedby');
+        });
+      });
+      if (!form.querySelector('.has-error') && statusEl.classList.contains('is-error')) showStatus('', '');
     });
   }
 
