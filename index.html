@@ -252,72 +252,57 @@
     <!-- 4. MY WORK -->
     <section class="screen projects" id="work" aria-labelledby="work-title">
       <div class="container">
-        <div class="section-head reveal">
-          <h2 id="work-title" class="section-title">My work</h2>
-          <p class="section-intro">Real projects I've built: a web app made with AI, and a game made with a team.</p>
+        <div class="work-head reveal">
+          <div class="section-head">
+            <h2 id="work-title" class="section-title">My work</h2>
+            <p class="section-intro">Real projects I've built: a web app made with AI, and a game made with a team.</p>
+          </div>
+          <div class="work-tools">
+            <div class="filters" role="group" aria-label="Show projects by kind">
+              <button type="button" data-filter="all" aria-pressed="true">All</button>
+              <button type="button" data-filter="website" aria-pressed="false">Websites</button>
+              <button type="button" data-filter="ai" aria-pressed="false">AI</button>
+              <button type="button" data-filter="game" aria-pressed="false">Games</button>
+            </div>
+            <p class="work-count" id="work-count" aria-live="polite">2 projects</p>
+          </div>
         </div>
 
-        <article class="project reveal">
-          <a class="project-preview project-shot" href="https://sagee-tau.vercel.app/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
-            <img src="assets/work-sage.jpg" alt="" width="880" height="462" loading="lazy" decoding="async">
-          </a>
-
-          <div class="project-body">
-            <h3 class="project-title">Sage</h3>
-            <p>A web app that turns your hobbies into career ideas. You type what you love, and Sage's AI suggests careers that fit, explains why each one fits, and gives you a first step. It has accounts, a 7-day free trial and paid plans.</p>
-            <ul class="chips chips-small" role="list" aria-label="Built with">
-              <li>Next.js</li>
-              <li>TypeScript</li>
-              <li>Gemini AI</li>
-              <li>Stripe payments</li>
-              <li>AI-assisted</li>
-            </ul>
-            <div class="project-links">
-              <a class="btn btn-primary project-link" href="https://sagee-tau.vercel.app/" target="_blank" rel="noopener">
-                Open Sage
-                <span class="visually-hidden">(opens in a new tab)</span>
-                <svg class="icon ext-icon" aria-hidden="true"><use href="#i-external"/></svg>
-              </a>
-              <a class="btn btn-ghost project-link" href="https://github.com/DanilAbram/Sage" target="_blank" rel="noopener">
-                <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>
-                Code
-                <span class="visually-hidden">of Sage on GitHub (opens in a new tab)</span>
-                <svg class="icon ext-icon" aria-hidden="true"><use href="#i-external"/></svg>
-              </a>
+        <!-- The first project is a wide row. Others sit two per row; one left
+             alone becomes a wide row with its picture on the right (js/main.js). -->
+        <ol class="projects-list" id="projects" role="list">
+          <li class="project is-wide reveal" data-kinds="website ai">
+            <div class="project-pic">
+              <img src="assets/work/sage-home-1280.webp" srcset="assets/work/sage-home-720.webp 720w, assets/work/sage-home-1280.webp 1280w" sizes="(min-width: 1200px) 600px, (min-width: 900px) 54vw, 92vw" alt="Sage home page: a box asking what you like doing, next to the headline" width="1280" height="800" loading="lazy" decoding="async">
             </div>
-          </div>
-        </article>
-
-        <article class="project project-flip reveal">
-          <a class="project-preview project-shot" href="https://hliebmar.itch.io/bunker-7" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
-            <img src="assets/work-bunker7.jpg" alt="" width="880" height="495" loading="lazy" decoding="async">
-          </a>
-
-          <div class="project-body">
-            <h3 class="project-title">Bunker 7</h3>
-            <p>A survival game made for a game jam by a team of four: Hleib, Ben, Sinan and me. The theme was "Bounce Back". You have seven days to build a radio beacon in your bunker, while radiation, hunger and zombies wait outside.</p>
-            <ul class="chips chips-small" role="list" aria-label="Built with">
-              <li>Godot</li>
-              <li>GDScript</li>
-              <li>Game jam</li>
-              <li>Team of 4</li>
-              <li>Plays in the browser</li>
-            </ul>
-            <div class="project-links">
-              <a class="btn btn-primary project-link" href="https://hliebmar.itch.io/bunker-7" target="_blank" rel="noopener">
-                Play it
-                <span class="visually-hidden">(opens itch.io in a new tab)</span>
-                <svg class="icon ext-icon" aria-hidden="true"><use href="#i-external"/></svg>
-              </a>
-              <a class="btn btn-ghost project-link" href="https://github.com/DanilAbram/GameJam" target="_blank" rel="noopener">
-                <svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>
-                Code
-                <span class="visually-hidden">of Bunker 7 on GitHub (opens in a new tab)</span>
-                <svg class="icon ext-icon" aria-hidden="true"><use href="#i-external"/></svg>
-              </a>
+            <div class="project-body">
+              <h3 class="project-title"><button type="button" data-case="sage" aria-haspopup="dialog">Sage</button></h3>
+              <p class="project-tags">Website · AI</p>
+              <p class="project-text">Write what you like doing and get careers that fit, why each one fits, and a first step to take.</p>
+              <div class="project-actions">
+                <span class="project-more" aria-hidden="true">View project <svg class="icon"><use href="#i-arrow-right"/></svg></span>
+                <a class="project-link" href="https://sagee-tau.vercel.app/" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>See it live<span class="visually-hidden">: Sage (opens in a new tab)</span></a>
+                <a class="project-link" href="https://github.com/DanilAbram/Sage" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>GitHub<span class="visually-hidden">: Sage code (opens in a new tab)</span></a>
+              </div>
             </div>
-          </div>
-        </article>
+          </li>
+
+          <li class="project is-wide is-flipped reveal" data-kinds="game">
+            <div class="project-pic">
+              <img src="assets/work/bunker7-title-1280.webp" srcset="assets/work/bunker7-title-720.webp 720w, assets/work/bunker7-title-1280.webp 1280w" sizes="(min-width: 1200px) 600px, (min-width: 900px) 54vw, 92vw" alt="Bunker 7 title screen: a survivor with a backpack looks over a ruined city at sunset" width="1280" height="800" loading="lazy" decoding="async">
+            </div>
+            <div class="project-body">
+              <h3 class="project-title"><button type="button" data-case="bunker-7" aria-haspopup="dialog">Bunker 7</button></h3>
+              <p class="project-tags">Game · Team project</p>
+              <p class="project-text">A survival game you play in the browser. You have seven days to build a radio and get rescued.</p>
+              <div class="project-actions">
+                <span class="project-more" aria-hidden="true">View project <svg class="icon"><use href="#i-arrow-right"/></svg></span>
+                <a class="project-link" href="https://hliebmar.itch.io/bunker-7" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg>Play it<span class="visually-hidden">: Bunker 7 (opens in a new tab)</span></a>
+                <a class="project-link" href="https://github.com/DanilAbram/GameJam" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>GitHub<span class="visually-hidden">: Bunker 7 code (opens in a new tab)</span></a>
+              </div>
+            </div>
+          </li>
+        </ol>
 
         <ol class="steps" role="list" aria-label="How I build with AI">
           <li class="step reveal">
@@ -441,5 +426,98 @@
       </a>
     </div>
   </footer>
+
+  <!-- Project pages: open over the site from a card in My work -->
+  <dialog class="case" id="case">
+    <div class="case-bar">
+      <div class="container case-bar-inner">
+        <button class="case-btn" type="button" data-case-close><svg class="icon icon-back" aria-hidden="true"><use href="#i-arrow-right"/></svg><span>Back<span class="case-wide"> to my work</span></span></button>
+        <div class="case-steps">
+          <button class="case-btn case-btn-icon" type="button" data-case-step="-1" aria-label="Previous project"><svg class="icon icon-back" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+          <p id="case-count" aria-live="polite">1 / 2</p>
+          <button class="case-btn case-btn-icon" type="button" data-case-step="1" aria-label="Next project"><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <article class="container case-page" data-case-page="sage" aria-labelledby="case-sage-title" hidden>
+      <div class="case-media">
+        <img class="case-hero" src="assets/work/sage-home-1280.webp" alt="Sage home page: a box asking what you like doing, next to the headline" width="1280" height="800" loading="lazy" decoding="async">
+        <div class="case-thumbs" role="group" aria-label="Pictures of Sage">
+          <button type="button" aria-pressed="true" aria-label="Home page" data-src="assets/work/sage-home-1280.webp" data-alt="Sage home page: a box asking what you like doing, next to the headline"><img src="assets/work/sage-home-720.webp" alt="" width="720" height="450" loading="lazy" decoding="async"></button>
+          <button type="button" aria-pressed="false" aria-label="Example report" data-src="assets/work/sage-report-1280.webp" data-alt="An example Sage report for a game level designer, with why it fits and a 4-week plan"><img src="assets/work/sage-report-720.webp" alt="" width="720" height="450" loading="lazy" decoding="async"></button>
+          <button type="button" aria-pressed="false" aria-label="Plans" data-src="assets/work/sage-plans-1280.webp" data-alt="Sage plans: free preview, monthly and yearly"><img src="assets/work/sage-plans-720.webp" alt="" width="720" height="450" loading="lazy" decoding="async"></button>
+        </div>
+      </div>
+      <div class="case-body">
+        <h2 class="case-title" id="case-sage-title" tabindex="-1">Sage</h2>
+        <p class="project-tags">Website · AI</p>
+        <p class="case-lead">Write what you like doing and get careers that fit, why each one fits, and a first step to take.</p>
+        <div class="case-links">
+          <a class="btn btn-primary" href="https://sagee-tau.vercel.app/" target="_blank" rel="noopener">See it live<span class="visually-hidden"> (opens in a new tab)</span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+          <a class="btn btn-ghost" href="https://github.com/DanilAbram/Sage" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>GitHub<span class="visually-hidden"> (opens in a new tab)</span></a>
+        </div>
+        <h3>About the project</h3>
+        <p>Sage starts from what you already enjoy instead of a job title. You write a few words about your hobbies, and Google's Gemini AI suggests careers and explains each match using your own words.</p>
+        <p>Every career ends with one thing you can do next. The full report adds what a typical day is like, how people get into the job, and a plan for the first four weeks.</p>
+        <h3>What it does</h3>
+        <ul class="case-list">
+          <li>Free preview with three careers, no sign-up and no card</li>
+          <li>Accounts that save every search</li>
+          <li>Monthly and yearly plans with a 7-day trial, through Stripe</li>
+          <li>English, Spanish, French, German and Russian</li>
+        </ul>
+        <h3>Details</h3>
+        <dl class="case-facts">
+          <div><dt>Kind</dt><dd>Web app</dd></div>
+          <div><dt>Built with</dt><dd>Next.js, React, TypeScript, Tailwind CSS, Postgres, Gemini, Stripe</dd></div>
+          <div><dt>Made by</dt><dd>Me, with an AI coding assistant</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="container case-page" data-case-page="bunker-7" aria-labelledby="case-bunker-7-title" hidden>
+      <div class="case-media">
+        <img class="case-hero" src="assets/work/bunker7-title-1280.webp" alt="Bunker 7 title screen: a survivor with a backpack looks over a ruined city at sunset" width="1280" height="800" loading="lazy" decoding="async">
+        <div class="case-thumbs" role="group" aria-label="Pictures of Bunker 7">
+          <button type="button" aria-pressed="true" aria-label="Title screen" data-src="assets/work/bunker7-title-1280.webp" data-alt="Bunker 7 title screen: a survivor with a backpack looks over a ruined city at sunset"><img src="assets/work/bunker7-title-720.webp" alt="" width="720" height="450" loading="lazy" decoding="async"></button>
+          <button type="button" aria-pressed="false" aria-label="Inside the bunker" data-src="assets/work/bunker7-inside-1280.webp" data-alt="Inside the bunker: a lit room under the ruins with a cot, a locker and workbenches"><img src="assets/work/bunker7-inside-720.webp" alt="" width="720" height="450" loading="lazy" decoding="async"></button>
+        </div>
+      </div>
+      <div class="case-body">
+        <h2 class="case-title" id="case-bunker-7-title" tabindex="-1">Bunker 7</h2>
+        <p class="project-tags">Game · Team project</p>
+        <p class="case-lead">A survival game you play in the browser. You have seven days to build a radio and get rescued.</p>
+        <div class="case-links">
+          <a class="btn btn-primary" href="https://hliebmar.itch.io/bunker-7" target="_blank" rel="noopener">Play it<span class="visually-hidden"> (opens in a new tab)</span><svg class="icon" aria-hidden="true"><use href="#i-external"/></svg></a>
+          <a class="btn btn-ghost" href="https://github.com/DanilAbram/GameJam" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>GitHub<span class="visually-hidden"> (opens in a new tab)</span></a>
+        </div>
+        <h3>About the project</h3>
+        <p>You are the last survivor in Bunker 7. Each day you climb out to collect wood, scrap and circuits among the zombies, and the radiation grows the farther you go from the hatch.</p>
+        <p>We made it for a game jam with the theme "Bounce Back". When you die you wake up in the bunker again, but only a few times.</p>
+        <h3>What it does</h3>
+        <ul class="case-list">
+          <li>One goal: finish the radio beacon and be alive on day 7</li>
+          <li>Thirst, hunger and radiation to manage on every trip</li>
+          <li>Bunker rooms you clear and upgrade one by one</li>
+          <li>Two more places to explore: the Old Mine and the Bomb Crater</li>
+          <li>Three difficulty levels</li>
+        </ul>
+        <h3>Details</h3>
+        <dl class="case-facts">
+          <div><dt>Kind</dt><dd>Browser game</dd></div>
+          <div><dt>Built with</dt><dd>Godot, GDScript</dd></div>
+          <div><dt>Made by</dt><dd>A team of four: Hleib, Ben, Sinan and me</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <button class="case-next" type="button" data-case-step="1">
+      <span class="container case-next-inner">
+        <span>Next project<strong id="case-next-name">Bunker 7</strong></span>
+        <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg>
+      </span>
+    </button>
+  </dialog>
 </body>
 </html>

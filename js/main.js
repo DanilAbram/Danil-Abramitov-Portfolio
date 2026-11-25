@@ -44,7 +44,7 @@
   }
 
   // Lists that appear one item after another once their block is revealed
-  document.querySelectorAll('.tags, .facts, .offer-list, .project .chips, .contact-alt, .request-form').forEach(function (list) {
+  document.querySelectorAll('.tags, .facts, .offer-list, .contact-alt, .request-form').forEach(function (list) {
     list.classList.add('stagger');
     Array.prototype.forEach.call(list.children, function (child, i) {
       child.style.setProperty('--i', i);
@@ -52,8 +52,8 @@
   });
 
   // ---------- Scroll-linked effects ----------
-  // Header background, nav highlight, progress line, hero depth, page stack
-  // and the site preview all run from one per-frame update.
+  // Header background, nav highlight, progress line, hero depth and
+  // page stack all run from one per-frame update.
   // Layout is only READ in measure() (on load, resize and font changes),
   // all reads first, then writes. Scrolling itself does plain math with the
   // cached numbers, so it never forces the browser to recalculate layout.
@@ -166,6 +166,107 @@
       });
     }, { threshold: 0.12 });
     reveals.forEach(function (el) { revealer.observe(el); });
+  }
+
+  // ---------- My work: filters ----------
+  var projects = Array.prototype.slice.call(document.querySelectorAll('#projects .project'));
+  var filterBtns = Array.prototype.slice.call(document.querySelectorAll('[data-filter]'));
+  var workCount = document.getElementById('work-count');
+  filterBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var kind = btn.getAttribute('data-filter');
+      filterBtns.forEach(function (b) { b.setAttribute('aria-pressed', String(b === btn)); });
+      var shown = projects.filter(function (p) {
+        var match = kind === 'all' || p.getAttribute('data-kinds').split(' ').indexOf(kind) > -1;
+        p.hidden = !match;
+        return match;
+      });
+      shown.forEach(function (p, i) {
+        // First is wide; a last one with no neighbour is wide too, mirrored
+        var alone = i > 0 && i === shown.length - 1 && shown.length % 2 === 0;
+        p.classList.toggle('is-wide', i === 0 || alone);
+        p.classList.toggle('is-flipped', alone);
+        p.classList.add('is-visible');
+      });
+      workCount.textContent = shown.length + (shown.length === 1 ? ' project' : ' projects');
+    });
+  });
+
+  // ---------- My work: project pages ----------
+  // The address (#work/sage) decides what is open, so the browser's Back
+  // button closes a project and a project link can be shared.
+  var caseBox = document.getElementById('case');
+  if (caseBox && caseBox.showModal) {
+    var pages = Array.prototype.slice.call(caseBox.querySelectorAll('[data-case-page]'));
+    var caseIds = pages.map(function (p) { return p.getAttribute('data-case-page'); });
+    var caseCount = document.getElementById('case-count');
+    var nextName = document.getElementById('case-next-name');
+    var current = -1;
+    var pushed = false; // did we add the history entry ourselves?
+
+    var titleOf = function (i) { return pages[i].querySelector('.case-title'); };
+    var syncCase = function () {
+      var at = caseIds.indexOf(location.hash.indexOf('#work/') === 0 ? location.hash.slice(6) : '');
+      if (at === -1) {
+        pushed = false;
+        if (caseBox.open) caseBox.close();
+        root.classList.remove('case-open');
+        return;
+      }
+      var wasOpen = caseBox.open;
+      var changed = at !== current;
+      current = at;
+      pages.forEach(function (p, i) { p.hidden = i !== at; });
+      caseBox.setAttribute('aria-labelledby', titleOf(at).id);
+      caseCount.textContent = (at + 1) + ' / ' + pages.length;
+      nextName.textContent = titleOf((at + 1) % pages.length).textContent;
+      root.classList.add('case-open');
+      if (!wasOpen) caseBox.showModal();
+      if (!wasOpen || changed) {
+        titleOf(at).focus({ preventScroll: true });
+        caseBox.scrollTop = 0;
+      }
+    };
+    var closeCase = function () {
+      if (pushed) { history.back(); return; }
+      history.replaceState(null, '', '#work');
+      syncCase();
+      document.getElementById('work').scrollIntoView();
+    };
+
+    document.querySelectorAll('[data-case]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        history.pushState(null, '', '#work/' + btn.getAttribute('data-case'));
+        pushed = true;
+        syncCase();
+      });
+    });
+    caseBox.querySelector('[data-case-close]').addEventListener('click', closeCase);
+    caseBox.addEventListener('cancel', function (e) { e.preventDefault(); closeCase(); });
+    // Some browsers close on a second Esc without asking: keep the address right
+    caseBox.addEventListener('close', function () {
+      if (location.hash.indexOf('#work/') === 0) closeCase();
+    });
+    caseBox.querySelectorAll('[data-case-step]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var to = (current + Number(btn.getAttribute('data-case-step')) + pages.length) % pages.length;
+        history.replaceState(null, '', '#work/' + caseIds[to]);
+        syncCase();
+      });
+    });
+    pages.forEach(function (page) {
+      var big = page.querySelector('.case-hero');
+      var thumbs = Array.prototype.slice.call(page.querySelectorAll('.case-thumbs button'));
+      thumbs.forEach(function (t) {
+        t.addEventListener('click', function () {
+          thumbs.forEach(function (o) { o.setAttribute('aria-pressed', String(o === t)); });
+          big.src = t.getAttribute('data-src');
+          big.alt = t.getAttribute('data-alt');
+        });
+      });
+    });
+    window.addEventListener('popstate', syncCase);
+    syncCase();
   }
 
   // Copy email to clipboard (falls back to mailto:)
